@@ -1,0 +1,165 @@
+:root {
+    --maroon-primary: #5a0000;
+    --maroon-dark: #2a0407;
+    --maroon-light: #7f1a2a;
+    --maroon-accent: #9b2335;
+    --maroon-accent-rgb: 155, 35, 53;
+
+    --bg-primary: #050505;
+    --bg-secondary: #0b0b0b;
+    --bg-tertiary: #101010;
+    --card-bg: #2a0c0c;
+    --section-bg: #120606;
+
+    --text-primary: #f8f9fa;
+    --text-muted: #adb5bd;
+
+    --border-soft: rgba(255, 255, 255, 0.12);
+
+    --shadow-card: 0 6px 18px rgba(0, 0, 0, 0.5);
+    --shadow-card-hover: 0 18px 36px rgba(128, 0, 0, 0.35);
+
+    --grid-color: rgba(var(--maroon-accent-rgb), 0.08);
+    --wave-color: rgba(var(--maroon-accent-rgb), 0.14);
+    --particle-color: rgba(var(--maroon-accent-rgb), 0.35);
+
+    --float-1: rgba(var(--maroon-accent-rgb), 0.18);
+    --float-2: rgba(90, 0, 0, 0.28);
+    --float-3: rgba(127, 26, 42, 0.18);
+
+    --glow-soft: rgba(var(--maroon-accent-rgb), 0.45);
+    --glow-strong: rgba(var(--maroon-accent-rgb), 0.75);
+
+    --nav-text: var(--text-primary);
+    --footer-bg: #3B060A;
+    --footer-text: #ffffff;
+    --footer-accent: #ffd700;
+    --footer-bg-strong: linear-gradient(135deg, rgba(22, 7, 10, 0.98) 0%, rgba(34, 10, 14, 0.96) 55%, rgba(12, 6, 8, 0.98) 100%);
+
+    --skill-fill: linear-gradient(90deg, var(--maroon-primary), var(--maroon-accent));
+    --tag-bg: rgba(128, 0, 0, 0.2);
+
+    --button-primary: var(--maroon-primary);
+    --button-primary-hover: #6d0c0c;
+
+    --input-bg: #140606;
+    --input-border: rgba(var(--maroon-accent-rgb), 0.28);
+
+    --radius-xl: 28px;
+    --radius-lg: 20px;
+    --radius-md: 14px;
+    --transition-base: 280ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    --nav-bg: rgba(14, 8, 10, 0.78);
+
+    --dark-bg: var(--bg-primary);
+    --dark-card: var(--card-bg);
+    --text-light: var(--text-primary);
+    --text-gray: var(--text-muted);
+}
+
+:root[data-theme="light"],
+body[data-theme="light"] {
+    --maroon-primary: #6b0f1a;
+    --maroon-dark: #4a0a12;
+    --maroon-light: #8a2534;
+    --maroon-accent: #a02a3a;
+    --maroon-accent-rgb: 160, 42, 58;
+
+    --bg-primary: #f9f6f6;
+    --bg-secondary: #f2e8e8;
+    --bg-tertiary: #ffffff;
+    --card-bg: #ffffff;
+    --section-bg: #f3eded;
+
+    --text-primary: #2b0b0b;
+    --text-muted: #6a4a4a;
+
+    --border-soft: rgba(90, 0, 0, 0.12);
+
+    --shadow-card: 0 6px 18px rgba(90, 0, 0, 0.12);
+    --shadow-card-hover: 0 16px 36px rgba(90, 0, 0, 0.18);
+
+    --grid-color: rgba(var(--maroon-accent-rgb), 0.10);
+    --wave-color: rgba(var(--maroon-accent-rgb), 0.16);
+    --particle-color: rgba(var(--maroon-accent-rgb), 0.24);
+
+    --float-1: rgba(var(--maroon-accent-rgb), 0.16);
+    --float-2: rgba(90, 0, 0, 0.10);
+    --float-3: rgba(138, 37, 52, 0.14);
+
+    --glow-soft: rgba(var(--maroon-accent-rgb), 0.3);
+    --glow-strong: rgba(var(--maroon-accent-rgb), 0.5);
+
+    --nav-text: var(--text-primary);
+    --footer-bg: #5a0c0c;
+    --footer-text: #ffffff;
+    --footer-accent: #c78b2a;
+    --footer-bg-strong: linear-gradient(135deg, rgba(245, 236, 238, 0.96) 0%, rgba(255, 247, 247, 0.98) 60%, rgba(239, 231, 232, 0.96) 100%);
+
+    --skill-fill: linear-gradient(90deg, var(--maroon-primary), var(--maroon-accent));
+    --tag-bg: rgba(122, 17, 17, 0.16);
+
+    --button-primary: var(--maroon-primary);
+    --button-primary-hover: #8a1a1a;
+
+    --input-bg: #ffffff;
+    --input-border: rgba(var(--maroon-accent-rgb), 0.3);
+    --nav-bg: rgba(248, 242, 242, 0.9);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.site-nav {
+    min-height: 70px;
+    background: var(--nav-bg);
+    border-bottom: 1px solid var(--border-soft);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+.site-nav .navbar-brand {
+    color: var(--nav-text);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    cursor: default;
+}
+
+.site-nav .navbar-brand:hover {
+    color: var(--nav-text);
+}
+
+.site-nav .nav-link {
+    color: var(--nav-text);
+    padding: 12px;
+    transition: color var(--transition-base);
+}
+
+.site-nav .nav-link:hover {
+    color: var(--maroon-accent);
+}
+
+.site-nav .nav-link.active {
+    color: var(--maroon-primary);
+    font-weight: 600;
+}
+
+.site-nav .navbar-toggler {
+    border-color: var(--border-soft);
+}
+
+.site-nav .navbar-toggler:focus {
+    box-shadow: 0 0 0 0.2rem rgba(var(--maroon-accent-rgb), 0.2);
+}
+
+.site-nav .navbar-toggler-icon {
+    filter: invert(1);
+}
+
+:root[data-theme="light"] .site-nav .navbar-toggler-icon,
+body[data-theme="light"] .site-nav .navbar-toggler-icon {
+    filter: none;
+}
