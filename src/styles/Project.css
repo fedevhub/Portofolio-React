@@ -1,0 +1,852 @@
+.section-title {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.portfolio-section .section-title h2.highlight {
+    color: #ffffff !important;
+}
+
+.section-title .highlight-text {
+    color: var(--text-muted, #a0a0a0);
+    font-size: 1.1rem;
+}
+
+/* ==========================================
+   TOP ACTIONS (Admin Add Button)
+   ========================================== */
+.project-top-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 24px;
+}
+
+
+/* ==========================================
+   PROJECT CARD
+   ========================================== */
+.project-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    background: rgba(var(--maroon-accent-rgb), 0.08);
+    border: 1px solid rgba(var(--maroon-accent-rgb), 0.18);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
+    border-radius: var(--radius-lg);
+}
+
+.project-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 32px rgba(var(--maroon-accent-rgb), 0.28);
+    border-color: rgba(var(--maroon-accent-rgb), 0.4);
+}
+
+/* Card Image Wrapper */
+.img-wrapper {
+    padding: 16px;
+    background: transparent;
+}
+
+.img-wrapper img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
+}
+
+/* Placeholder for no image */
+.project-placeholder {
+    width: 100%;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(139, 41, 66, 0.1);
+    border: 2px dashed rgba(139, 41, 66, 0.3);
+    border-radius: 16px;
+    color: var(--text-muted, #a0a0a0);
+    font-size: 0.9rem;
+    margin: 16px;
+}
+
+/* Card Body */
+.card-body {
+    padding: 20px 22px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.card-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-primary, #ffffff);
+    margin-bottom: 4px;
+}
+
+.card-text {
+    color: var(--text-muted, #a0a0a0);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* Card Tags */
+.card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.card-tag {
+    padding: 5px 12px;
+    background: rgba(139, 41, 66, 0.2);
+    border: 1px solid rgba(139, 41, 66, 0.3);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-primary, #ffffff);
+}
+
+
+
+/* ==========================================
+   PROJECT CARD FOOTER
+   ========================================== */
+.project-card-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(139, 41, 66, 0.15);
+}
+
+/* Status Badge */
+.project-status {
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 4px 14px;
+    border-radius: 20px;
+}
+
+.project-status.progress {
+    background: rgba(255, 193, 7, 0.15);
+    color: #ffc107;
+    border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.project-status.done {
+    background: rgba(40, 167, 69, 0.15);
+    color: #28a745;
+    border: 1px solid rgba(40, 167, 69, 0.3);
+}
+
+/* Action Group */
+.project-action-group {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+/* ==========================================
+   PROJECT EMPTY STATE
+   ========================================== */
+.project-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted, #a0a0a0);
+    font-size: 1.1rem;
+}
+
+/* ==========================================
+   PROJECT FORM
+   ========================================== */
+.project-form {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 30px;
+    background: linear-gradient(160deg, rgba(139, 41, 66, 0.1) 0%, rgba(18, 7, 9, 0.98) 50%, rgba(8, 3, 4, 1) 100%);
+    border: 1px solid rgba(139, 41, 66, 0.25);
+    border-radius: 24px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+}
+
+.project-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.project-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 8px;
+    align-items: flex-start;
+}
+
+.project-field select {
+    width: 100%;
+    padding: 12px 16px;
+}
+
+.project-field span {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-primary, #ffffff);
+    gap: 10px;
+}
+
+.project-field-full {
+    grid-column: 1 / -1;
+}
+
+.project-form input[type="text"],
+.project-form input[type="email"],
+.project-form input[type="password"],
+.project-form select,
+.project-form textarea {
+    padding: 12px 16px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(139, 41, 66, 0.3);
+    border-radius: 12px;
+    color: var(--text-primary, #ffffff);
+    font-size: 0.95rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.project-form input:focus,
+.project-form select:focus,
+.project-form textarea:focus {
+    outline: none;
+    border-color: var(--maroon-primary, #8B2942);
+    box-shadow: 0 0 0 3px rgba(139, 41, 66, 0.2);
+}
+
+.project-form textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.project-helper {
+    font-size: 0.8rem;
+    color: var(--text-muted, #a0a0a0);
+}
+
+/* Checkbox */
+.project-checkbox {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.project-checkbox input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--maroon-primary, #8B2942);
+}
+
+/* Form Actions */
+.project-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 14px;
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(139, 41, 66, 0.2);
+}
+
+.project-form-title {
+    text-align: center;
+    margin-top: 16px;
+    color: var(--text-muted, #a0a0a0);
+    font-size: 0.9rem;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+/* ==========================================
+   BUTTONS
+   ========================================== */
+.btn {
+    padding: 10px 22px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-primary-modern {
+    background: linear-gradient(135deg, var(--maroon-primary, #8B2942), var(--maroon-accent, #C9485B));
+    border: none;
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(139, 41, 66, 0.35);
+}
+
+.btn-primary-modern:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(139, 41, 66, 0.5);
+}
+
+.btn-primary-modern:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-outline-modern {
+    background: transparent;
+    border: 1px solid rgba(139, 41, 66, 0.5);
+    color: var(--text-primary, #ffffff);
+}
+
+.btn-outline-modern:hover {
+    background: rgba(139, 41, 66, 0.15);
+    border-color: var(--maroon-primary, #8B2942);
+}
+
+/* Danger Button */
+.project-danger-btn {
+    background: rgba(220, 53, 69, 0.15);
+    border: 1px solid rgba(220, 53, 69, 0.4);
+    color: #dc3545;
+    padding: 10px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.project-danger-btn:hover {
+    background: rgba(220, 53, 69, 0.25);
+    border-color: #dc3545;
+}
+
+/* ==========================================
+   PROJECT MODAL
+   ========================================== */
+.project-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1050;
+    padding: 20px;
+}
+
+.project-modal-card {
+    width: 100%;
+    max-width: 900px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: linear-gradient(160deg, rgba(139, 41, 66, 0.25) 0%, rgba(18, 7, 9, 0.98) 45%, rgba(8, 3, 4, 1) 100%);
+    border: 1px solid rgba(139, 41, 66, 0.3);
+    border-radius: 24px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+    position: relative;
+}
+
+.project-modal-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--maroon-primary, #8B2942), var(--maroon-accent, #C9485B));
+    border-radius: 24px 24px 0 0;
+}
+
+/* Modal Header */
+.project-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 24px 28px;
+    border-bottom: 1px solid rgba(139, 41, 66, 0.2);
+}
+
+.project-modal-header h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary, #ffffff);
+    margin-bottom: 6px;
+}
+
+.project-modal-header p {
+    color: var(--text-muted, #a0a0a0);
+    font-size: 0.95rem;
+}
+
+.project-close-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.project-close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Modal Body */
+.project-modal-body {
+    padding: 28px;
+}
+
+/* Detail Gallery */
+.project-detail-gallery {
+    margin-bottom: 24px;
+}
+
+.project-detail-image {
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+.project-detail-placeholder {
+    height: 350px;
+    margin: 0;
+}
+
+/* Detail Grid */
+.project-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 24px;
+}
+
+.project-detail-content h5 {
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-primary, #ffffff);
+    margin-bottom: 10px;
+}
+
+.project-detail-text {
+    color: var(--text-muted, #a0a0a0);
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+.modal-tags {
+    margin-top: 12px;
+}
+
+/* Detail Side */
+.project-detail-side {
+    background: rgba(139, 41, 66, 0.08);
+    border: 1px solid rgba(139, 41, 66, 0.2);
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.project-detail-side h6 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary, #ffffff);
+    margin-bottom: 16px;
+}
+
+.project-detail-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.project-detail-list li {
+    color: var(--text-muted, #a0a0a0);
+    display: flex;
+    gap: 10px;
+    position: relative;
+    padding-left: 18px;
+}
+
+.project-detail-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 7px;
+    height: 7px;
+    background: linear-gradient(135deg, var(--maroon-primary, #8B2942), var(--maroon-accent, #C9485B));
+    border-radius: 50%;
+}
+
+.project-detail-list strong {
+    color: var(--text-primary, #ffffff);
+}
+
+/* Modal Footer */
+.project-modal-footer {
+    padding: 20px 28px 24px;
+    border-top: 1px solid rgba(139, 41, 66, 0.2);
+}
+
+.project-modal-footer .project-action-group {
+    justify-content: flex-end;
+}
+
+/* ==========================================
+   ADMIN PANEL
+   ========================================== */
+.project-admin-panel {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 30px;
+    background: linear-gradient(160deg, rgba(139, 41, 66, 0.1) 0%, rgba(18, 7, 9, 0.98) 50%, rgba(8, 3, 4, 1) 100%);
+    border: 1px solid rgba(139, 41, 66, 0.25);
+    border-radius: 24px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+}
+
+.project-admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(139, 41, 66, 0.2);
+}
+
+.project-admin-header h3 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text-primary, #ffffff);
+    margin-bottom: 4px;
+}
+
+.project-page-kicker {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--maroon-accent, #C9485B);
+    margin-bottom: 6px;
+}
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+@media (max-width: 768px) {
+    .project-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .project-detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .project-modal-card {
+        max-height: 95vh;
+    }
+
+    .project-modal-header {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .project-admin-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .project-form-actions {
+        flex-direction: column;
+    }
+
+    .project-form-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .project-card-footer {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+    }
+
+    .project-action-group {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
+
+.card-filter {
+    display: flex;
+    justify-content: center;
+    /* ⬅️ bikin ke tengah */
+    align-items: center;
+    flex-wrap: wrap;
+    /* ⬅️ biar responsive */
+    gap: 16px;
+    /* ⬅️ jarak antar tombol */
+    margin-top: 20px;
+}
+
+@media (max-width: 480px) {
+    .project-page-shell {
+        padding: 40px 0 60px;
+    }
+
+    .project-form {
+        padding: 20px;
+    }
+
+    .project-modal-body {
+        padding: 20px;
+    }
+}
+
+.portfolio-section .section-title {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.portfolio-section .section-title h2.highlight {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--maroon-primary);
+}
+
+.portfolio-section .section-title p.highlight-text {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+}
+
+.icon-plus {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.filter-btn {
+    padding: 10px 22px;
+    border-radius: 999px;
+    border: 2px solid var(--maroon-primary);
+    background: transparent;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+    background: var(--maroon-primary);
+    color: white;
+}
+
+.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    position: absolute;
+}
+
+.project-feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.project-feature-list li {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(139, 41, 66, 0.2);
+    color: var(--text-muted);
+}
+
+/* ==========================================
+   CUSTOM BUTTON VARIANTS
+   ========================================== */
+
+/* DETAIL BUTTON (soft glow) */
+.btn-detail {
+    background: rgba(139, 41, 66, 0.15);
+    border: 1px solid rgba(139, 41, 66, 0.4);
+    color: #fff;
+}
+
+.btn-detail:hover {
+    background: rgba(139, 41, 66, 0.3);
+    box-shadow: 0 0 12px rgba(139, 41, 66, 0.5);
+}
+
+
+/* EDIT BUTTON (outline neon) */
+.btn-edit {
+    background: transparent;
+    border: 1px dashed #C9485B;
+    color: #C9485B;
+}
+
+.btn-edit:hover {
+    background: rgba(201, 72, 91, 0.1);
+    border-style: solid;
+}
+
+
+/* DELETE BUTTON (danger strong) */
+.btn-delete {
+    background: linear-gradient(135deg, #dc3545, #ff6b6b);
+    border: none;
+    color: #fff;
+}
+
+.btn-delete:hover {
+    box-shadow: 0 0 14px rgba(220, 53, 69, 0.6);
+    transform: scale(1.05);
+}
+
+
+/* PREVIEW BUTTON (glass style) */
+.btn-preview {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    backdrop-filter: blur(6px);
+}
+
+.btn-preview:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+
+/* GITHUB BUTTON (dark solid) */
+.btn-github {
+    background: #171515;
+    border: 1px solid #333;
+    color: #fff;
+}
+
+.btn-github:hover {
+    background: #24292e;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+
+/* CLOSE BUTTON (modal action) */
+.btn-close-modern {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+}
+
+.btn-close-modern:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+
+/* ADD PROJECT BUTTON (lebih standout) */
+.btn-add {
+    background: linear-gradient(135deg, #ff7a18, #ffb347);
+    border: none;
+    color: #fff;
+    font-weight: 600;
+}
+
+.btn-add:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 167, 38, 0.5);
+}
+
+
+.project-action-group.user {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.project-action-group.admin {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+
+.portfolio-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 70px;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.pagination-custom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin: 0 auto;
+    list-style: none;
+    padding: 0;
+}
+
+.pagination-custom li {
+    flex-shrink: 0;
+}
+
+.page-item-custom {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: var(--card-bg);
+    color: var(--text-primary);
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    user-select: none;
+    border: 2px solid transparent;
+}
+
+.page-item-custom.active,
+.page-item-custom:hover {
+    background-color: var(--maroon-primary);
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 10px 20px rgba(var(--maroon-accent-rgb), 0.25);
+}
+
+.page-item-custom.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}

@@ -3,15 +3,15 @@ import me1 from "../assets/images/me1.jpg";
 
 export default function About() {
     return (
-        <section id="about" class="about-section">
-            <div class="container">
-                <div class="about">
-                    <div class="about-sheen"></div>
-                    <div class="row align-items-center">
-                        <div class="col-lg-6 mt-4 mt-lg-0 text-center text-lg-start order-1" data-aos="zoom-in-up"
+        <section id="about" className="about-section">
+            <div className="container">
+                <div className="about">
+                    <div className="about-sheen"></div>
+                    <div className="row align-items-center">
+                        <div className="col-lg-6 mt-4 mt-lg-0 text-center text-lg-start order-1" data-aos="zoom-in-up"
                             data-aos-delay="200">
-                            <h1 class="about-title">About Me</h1>
-                            <p class="about-sub-title">Halo! Saya Fitri Rachmania, seorang pelajar yang tertarik pada
+                            <h1 className="about-title">About Me</h1>
+                            <p className="about-sub-title">Halo! Saya Fitri Rachmania, seorang pelajar yang tertarik pada
                                 dunia
                                 desain web dan
                                 pengembangan front-end. Saya sedang bersekolah di SMKN 8 Malang jurusan Rekayasa
@@ -25,9 +25,9 @@ export default function About() {
                                 kolaborasi, magang, maupun freelance di bidang desain atau pengembangan web.</p>
                         </div>
 
-                        <div class="col-lg-6 text-center mt-4 mt-lg-0 order-2" data-aos="zoom-in-up"
+                        <div className="col-lg-6 text-center mt-4 mt-lg-0 order-2" data-aos="zoom-in-up"
                             data-aos-delay="200">
-                            <div class="profile-img profile-wrap">
+                            <div className="profile-img profile-wrap">
                                 <img
                                     src={me1}
                                     alt="Fitri Rachmania"

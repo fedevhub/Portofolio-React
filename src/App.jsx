@@ -3,7 +3,8 @@ import About from "./components/About";
 import Home from "./components/Home";
 import Navbar from "./components/Navbar";
 import Project, { AddProjectPage, EditProjectPage } from "./components/Project";
-
+import Footer from "./components/Footer";
+import Skills from "./components/Skills";
 function BackgroundLayer() {
   return (
     <div className="background">
@@ -38,7 +39,9 @@ function LandingPage() {
     <SiteLayout>
       <Home />
       <About />
+      <Skills />
       <Project />
+      <Footer />
     </SiteLayout>
   );
 }
