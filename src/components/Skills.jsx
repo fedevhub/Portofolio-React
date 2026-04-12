@@ -1,54 +1,89 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../styles/Skills.css";
+import supabase from "../assets/supabase-client";
+import { useAuth } from "../context/AuthContext";
+import { useLocation } from "react-router-dom";
+
 
 export default function Skills() {
-
-    const [skills, setSkills] = useState([
-        { id: 1, name: "HTML", icon: "fa-brands fa-html5", color: "#e34f26" },
-        { id: 2, name: "CSS", icon: "fa-brands fa-css3-alt", color: "#1572b6" },
-        { id: 3, name: "JavaScript", icon: "fa-brands fa-js", color: "#f7df1e" },
-    ]);
-
+    const [skills, setSkills] = useState([]);
     const [form, setForm] = useState({
-        name: "",
+        nama: "",
         icon: "",
-        color: "#ffffff"
+        color: "#ffffff",
     });
+
+    const { role } = useAuth();
+
+    const location = useLocation();
+
+    const isAdmin =
+        role === "admin" && location.pathname.startsWith("/admin");
 
     const [editId, setEditId] = useState(null);
 
-    const handleAdd = () => {
-        if (!form.name || !form.icon) return;
+    // FETCH FROM DB
+    useEffect(() => {
+        fetchSkillsFromDb();
+    }, []);
 
-        setSkills([
-            ...skills,
-            {
-                id: Date.now(),
-                ...form
-            }
-        ]);
+    async function fetchSkillsFromDb() {
+        const { data, error } = await supabase
+            .from("Skills")
+            .select("*")
+            .order("id", { ascending: false });
 
-        setForm({ name: "", icon: "", color: "#ffffff" });
+        if (!error) setSkills(data || []);
+    }
+
+    // ADD
+    const handleAdd = async () => {
+        if (!form.nama || !form.icon) return;
+
+        const { data, error } = await supabase
+            .from("Skills")
+            .insert([form])
+            .select();
+
+        if (!error) {
+            setSkills([data[0], ...skills]);
+            setForm({ nama: "", icon: "", color: "#ffffff" });
+        }
     };
 
-    const handleDelete = (id) => {
+    // DELETE
+    const handleDelete = async (id) => {
+        await supabase.from("Skills").delete().eq("id", id);
         setSkills(skills.filter((item) => item.id !== id));
     };
 
+    // EDIT
     const handleEdit = (skill) => {
-        setForm(skill);
+        setForm({
+            nama: skill.nama,
+            icon: skill.icon,
+            color: skill.color,
+        });
         setEditId(skill.id);
     };
 
-    const handleUpdate = () => {
-        setSkills(
-            skills.map((item) =>
-                item.id === editId ? { ...item, ...form } : item
-            )
-        );
+    // UPDATE
+    const handleUpdate = async () => {
+        const { error } = await supabase
+            .from("Skills")
+            .update(form)
+            .eq("id", editId);
 
-        setForm({ name: "", icon: "", color: "#ffffff" });
-        setEditId(null);
+        if (!error) {
+            setSkills(
+                skills.map((item) =>
+                    item.id === editId ? { ...item, ...form } : item
+                )
+            );
+
+            setEditId(null);
+            setForm({ nama: "", icon: "", color: "#ffffff" });
+        }
     };
 
     return (
@@ -56,66 +91,87 @@ export default function Skills() {
             <div className="container">
 
                 {/* HEADER */}
-                <div className="section-heading text-center mb-5">
-                    <p className="section-eyebrow">Toolkit</p>
+                <div className="section-heading">
                     <h1 className="skills-title">My Skills</h1>
                     <p className="section-subtitle">
-                        Skillset yang terus berkembang untuk membangun produk yang rapi dan modern.
+                        The tools and technologies I use to build applications and websites.
                     </p>
                 </div>
 
-                {/* FORM */}
-                <div className="skills-form">
+                {isAdmin && (
+                    <div className="skills-form">
 
-                    <input
-                        type="text"
-                        placeholder="Skill name"
-                        value={form.name}
-                        onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    />
+                        <input
+                            type="text"
+                            placeholder="Skill name"
+                            value={form.nama}
+                            onChange={(e) =>
+                                setForm({ ...form, nama: e.target.value })
+                            }
+                        />
 
-                    <input
-                        type="text"
-                        placeholder="Icon class (fa-brands fa-react)"
-                        value={form.icon}
-                        onChange={(e) => setForm({ ...form, icon: e.target.value })}
-                    />
+                        <input
+                            type="text"
+                            placeholder="Icon name"
+                            value={form.icon}
+                            onChange={(e) =>
+                                setForm({ ...form, icon: e.target.value })
+                            }
+                        />
 
-                    <input
-                        type="color"
-                        value={form.color}
-                        onChange={(e) => setForm({ ...form, color: e.target.value })}
-                    />
+                        <div className="color-input-group">
 
-                    {editId ? (
-                        <button className="btn btn-update" onClick={handleUpdate}>
-                            Update
-                        </button>
-                    ) : (
-                        <button className="btn btn-add" onClick={handleAdd}>
-                            Add
-                        </button>
-                    )}
+                            <input
+                                type="color"
+                                value={form.color}
+                                onChange={(e) =>
+                                    setForm({ ...form, color: e.target.value })
+                                }
+                            />
 
-                    {editId && (
-                        <button
-                            className="btn btn-cancel"
-                            onClick={() => {
-                                setEditId(null);
-                                setForm({ name: "", icon: "", color: "#ffffff" });
-                            }}
-                        >
-                            Cancel
-                        </button>
-                    )}
-                </div>
+                            <input
+                                type="text"
+                                placeholder="#ffffff"
+                                value={form.color}
+                                onChange={(e) =>
+                                    setForm({ ...form, color: e.target.value })
+                                }
+                            />
 
-                {/* GRID */}
+                        </div>
+
+                        {editId ? (
+                            <button className="btn btn-update" onClick={handleUpdate}>
+                                Update
+                            </button>
+                        ) : (
+                            <button className="btn btn-add" onClick={handleAdd}>
+                                <i className="bi bi-plus-lg"></i>Add Skills
+                            </button>
+                        )}
+
+                        {editId && (
+                            <button
+                                className="btn btn-cancel"
+                                onClick={() => {
+                                    setEditId(null);
+                                    setForm({ nama: "", icon: "", color: "#ffffff" });
+                                }}
+                            >
+                                Cancel
+                            </button>
+                        )}
+
+                    </div>
+                )}
+
                 <div className="skills-grid">
+
                     <div className="skills-row">
                         {skills.map((skill) => (
                             <div className="skill-card" key={skill.id}>
 
+                                {/* ICON */}
                                 <div
                                     className="skill-icon"
                                     style={{ "--icon-color": skill.color }}
@@ -123,29 +179,34 @@ export default function Skills() {
                                     <i className={skill.icon}></i>
                                 </div>
 
-                                <div className="skill-name">{skill.name}</div>
-
-                                <div className="skill-actions">
-
-                                    <button
-                                        className="btn btn-edit"
-                                        onClick={() => handleEdit(skill)}
-                                    >
-                                        Edit
-                                    </button>
-
-                                    <button
-                                        className="btn btn-delete"
-                                        onClick={() => handleDelete(skill.id)}
-                                    >
-                                        Delete
-                                    </button>
-
+                                {/* NAME */}
+                                <div className="skill-name">
+                                    {skill.nama}
                                 </div>
+
+                                {isAdmin && (
+                                    <div className="skill-actions">
+
+                                        <button
+                                            className="btn btn-edit"
+                                            onClick={() => handleEdit(skill)}
+                                        >
+                                            <i className="bi bi-pencil-square"></i>
+                                        </button>
+
+                                        <button
+                                            className="btn btn-delete"
+                                            onClick={() => handleDelete(skill.id)}
+                                        >
+                                            <i className="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                )}
 
                             </div>
                         ))}
                     </div>
+
                 </div>
 
             </div>

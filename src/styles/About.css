@@ -85,3 +85,22 @@ h6 {
     box-shadow: 0 0 30px var(--glow-soft);
     animation: shadowPulse 1s infinite alternate;
 }
+
+@media (min-width: 992px) {
+    .about-section .row {
+        flex-wrap: nowrap;
+    }
+}
+
+@media (max-width: 576px) {
+    .about-title {
+        font-size: 2.7rem;
+        padding: 0 15px;
+        padding-bottom: 10px;
+    }
+
+    .about-sub-title {
+        font-size: 1.0rem;
+        padding: 0 10px;
+    }
+}

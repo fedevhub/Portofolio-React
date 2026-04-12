@@ -38,7 +38,7 @@ export default function Footer() {
                                 <span>WhatsApp</span>
                             </a>
                             <a href="https://www.behance.net/fitrirach" target="_blank" className="social-item">
-                                <i class="bi bi-behance"></i>
+                                <i className="bi bi-behance"></i>
                                 <span>Behance</span>
                             </a>
                             <a href="mailto:fitrirachmania29@gmail.com" className="social-item">

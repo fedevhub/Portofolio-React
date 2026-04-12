@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import supabase from "../assets/supabase-client";
 import "../styles/Project.css";
+import { useAuth } from "../context/AuthContext";
+import { useLocation } from "react-router-dom";
 
 const FILTERS = [
   { label: "All", value: "all" },
@@ -22,8 +24,8 @@ const EMPTY_FORM = {
   github_url: "",
 };
 
-function getIsAdmin() {
-  return true;
+function getIsAdmin(role) {
+  return role === "admin";
 }
 
 function hasLink(url) {
@@ -360,7 +362,7 @@ function ProjectDetailModal({ project, isAdmin, onClose }) {
                 to={`/project/edit/${project.id}`}
                 className="btn btn-edit"
               >
-                Edit
+                <i className="bi bi-pencil-square"></i>
               </Link>
             )}
 
@@ -382,14 +384,14 @@ function ProjectEditorPage({ mode }) {
   const navigate = useNavigate();
   const { id } = useParams();
   const isEditMode = mode === "edit";
-  const isAdmin = getIsAdmin();
+  const { role } = useAuth();
+  const isAdmin = getIsAdmin(role);
   const [formData, setFormData] = useState(EMPTY_FORM);
   const [loading, setLoading] = useState(isEditMode);
   const [saving, setSaving] = useState(false);
   const [currentProject, setCurrentProject] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
-  
+
+
   useEffect(() => {
     if (!isEditMode || !id) {
       return;
@@ -401,9 +403,7 @@ function ProjectEditorPage({ mode }) {
       try {
         const project = await fetchProjectById(id);
 
-        if (!active) {
-          return;
-        }
+        if (!active) return;
 
         setCurrentProject(project);
         setFormData({
@@ -420,9 +420,7 @@ function ProjectEditorPage({ mode }) {
       } catch (error) {
         console.error("Error fetching project:", error);
       } finally {
-        if (active) {
-          setLoading(false);
-        }
+        if (active) setLoading(false);
       }
     }
 
@@ -432,6 +430,12 @@ function ProjectEditorPage({ mode }) {
       active = false;
     };
   }, [id, isEditMode]);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      console.log("USER:", data.user);
+    });
+  }, []);
 
   function updateForm(field, value) {
     setFormData((current) => ({
@@ -475,7 +479,7 @@ function ProjectEditorPage({ mode }) {
         }
       }
 
-      navigate("/");
+      navigate("/admin/dashboard");
       setTimeout(() => {
         document.getElementById("project")?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 50);
@@ -522,7 +526,7 @@ function ProjectEditorPage({ mode }) {
                 className="btn project-danger-btn"
                 onClick={() => setDeleteTarget(currentProject)}
               >
-                Delete
+                <i className="bi bi-trash"></i>
               </button>
             )}
           </div>
@@ -546,7 +550,6 @@ function ProjectEditorPage({ mode }) {
 }
 
 export default function Project() {
-  const isAdmin = getIsAdmin();
   const [projects, setProjects] = useState([]);
   const [activeFilter, setActiveFilter] = useState("all");
   const [loading, setLoading] = useState(true);
@@ -554,6 +557,12 @@ export default function Project() {
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
+  const { role } = useAuth();
+
+  const location = useLocation();
+
+  const isAdmin =
+    role === "admin" && location.pathname.startsWith("/admin");
 
   useEffect(() => {
     let active = true;
@@ -603,7 +612,7 @@ export default function Project() {
     const end = start + itemsPerPage;
     return filteredProjects.slice(start, end);
   }, [filteredProjects, currentPage]);
-  
+
   function goToPage(page) {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
@@ -620,7 +629,9 @@ export default function Project() {
       return;
     }
 
-    navigate("/");
+    // update state langsung tanpa reload
+    setProjects((prev) => prev.filter((p) => p.id !== project.id));
+    setDeleteTarget(null);
   }
 
   return (
@@ -663,9 +674,9 @@ export default function Project() {
           </div>
 
           {loading ? (
-            <p className="project-empty">Project sedang dimuat...</p>
+            <p className="project-empty">Project is loading...</p>
           ) : filteredProjects.length === 0 ? (
-            <p className="project-empty">Belum ada project di kategori ini.</p>
+            <p className="project-empty">There are no projects in this category yet.</p>
           ) : (
             <div className="card-container mt-5">
               {paginatedProjects.map((project) => (
@@ -694,16 +705,6 @@ export default function Project() {
                     <div className="project-card-footer">
                       <div className={`project-action-group ${isAdmin ? "admin" : "user"}`}>
 
-                        {/* DETAIL (SELALU ADA) */}
-                        <button
-                          type="button"
-                          className="btn btn-detail"
-                          onClick={() => setSelectedProject(project)}
-                        >
-                          Detail
-                        </button>
-
-                        {/* PREVIEW */}
                         {hasLink(project.preview_url) && (
                           <a
                             href={project.preview_url}
@@ -711,18 +712,25 @@ export default function Project() {
                             rel="noopener noreferrer"
                             className="btn btn-preview"
                           >
-                            Preview
+                            Preview<i className="bi bi-eye"></i>
                           </a>
                         )}
 
-                        {/* ADMIN ONLY */}
+                        <button
+                          type="button"
+                          className="btn btn-detail"
+                          onClick={() => setSelectedProject(project)}
+                        >
+                          Detail<i className="bi bi-arrow-right"></i>
+                        </button>
+
                         {isAdmin && (
                           <>
                             <Link
                               to={`/project/edit/${project.id}`}
                               className="btn btn-edit"
                             >
-                              Edit
+                              <i className="bi bi-pencil-square"></i>
                             </Link>
 
                             <button
@@ -730,7 +738,7 @@ export default function Project() {
                               className="btn btn-delete"
                               onClick={() => setDeleteTarget(project)}
                             >
-                              Delete
+                              <i className="bi bi-trash"></i>
                             </button>
                           </>
                         )}

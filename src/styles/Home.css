@@ -59,13 +59,92 @@
     box-shadow: 0 20px 40px rgba(var(--maroon-accent-rgb), 0.35);
 }
 
-.btn-outline-modern {
+.btn.btn-outline-modern {
     background: transparent;
     border: 1px solid rgba(var(--maroon-accent-rgb), 0.5);
     color: var(--text-primary);
 }
 
-.btn-outline-modern:hover {
+.btn.btn-outline-modern:hover {
     background: rgba(var(--maroon-accent-rgb), 0.12);
     transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    section {
+        padding: 90px 0;
+    }
+
+    .hero-section {
+        padding-top: 120px;
+    }
+
+
+}
+
+@media (max-width: 576px) {
+    body {
+        padding: 0 10px;
+    }
+
+    .navbar-brand {
+        padding-left: 15px;
+        font-size: 2.7rem;
+    }
+
+    .site-nav .container {
+        padding-right: 16px;
+    }
+
+    .site-nav .navbar-brand {
+        font-size: 0.8rem;
+    }
+
+    .site-nav .nav-link {
+        font-size: 0.85rem;
+        padding: 10px;
+    }
+
+    .navbar-nav {
+        padding-left: 15px;
+    }
+
+    .hero-title {
+        font-size: 2.7rem;
+    }
+
+    .hero-role {
+        font-size: 1.0rem;
+    }
+
+    .hero-text {
+        font-size: 0.90rem;
+        padding: 0 10px;
+    }
+
+    .hero-actions .btn {
+        padding: 14px 28px;
+        font-size: 0.75rem;
+    }
+
+}
+
+@media (max-width: 991px) {
+    .site-nav .navbar-nav .nav-link {
+        display: inline-flex;
+        align-self: flex-start;
+        width: fit-content;
+        padding-inline: 0;
+    }
+
+    .site-nav .navbar-nav .nav-link::after {
+        left: 0;
+        bottom: 4px;
+    }
+
+    .site-nav .navbar-nav .nav-link:hover::after,
+    .site-nav .navbar-nav .nav-link:focus-visible::after,
+    .site-nav .navbar-nav .nav-link.active::after {
+        width: 100%;
+    }
 }

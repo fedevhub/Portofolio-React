@@ -113,3 +113,13 @@ section {
     width: 100%;
     padding: 0;
 }
+
+@media (max-width: 576px) {
+    .footer-bottom {
+        padding-bottom: 10px;
+    }
+
+    .site-footer {
+        padding: 32px 24px 16px;
+    }
+}

@@ -1,0 +1,204 @@
+/* =========================
+   SPLASH SCREEN BASE
+========================= */
+
+.splash {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at top, #2a000f, #000000);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    z-index: 9999;
+}
+
+/* glow background */
+.glow-bg {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 20% 30%, rgba(255, 0, 76, 0.15), transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(128, 0, 32, 0.2), transparent 45%);
+    filter: blur(60px);
+}
+
+/* =========================
+   PARTICLES
+========================= */
+
+.particles span {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    animation: float 10s infinite ease-in-out;
+    opacity: 0.6;
+}
+
+.particles span:nth-child(odd) {
+    background: rgba(255, 0, 76, 0.5);
+}
+
+.particles span:nth-child(even) {
+    background: rgba(128, 0, 32, 0.5);
+}
+
+/* random positions */
+.particles span:nth-child(1) {
+    top: 10%;
+    left: 20%;
+}
+
+.particles span:nth-child(2) {
+    top: 30%;
+    left: 70%;
+}
+
+.particles span:nth-child(3) {
+    top: 80%;
+    left: 30%;
+}
+
+.particles span:nth-child(4) {
+    top: 60%;
+    left: 10%;
+}
+
+.particles span:nth-child(5) {
+    top: 20%;
+    left: 80%;
+}
+
+.particles span:nth-child(6) {
+    top: 50%;
+    left: 50%;
+}
+
+.particles span:nth-child(7) {
+    top: 25%;
+    left: 40%;
+}
+
+.particles span:nth-child(8) {
+    top: 70%;
+    left: 60%;
+}
+
+.particles span:nth-child(9) {
+    top: 15%;
+    left: 55%;
+}
+
+.particles span:nth-child(10) {
+    top: 85%;
+    left: 75%;
+}
+
+.particles span:nth-child(11) {
+    top: 35%;
+    left: 15%;
+}
+
+.particles span:nth-child(12) {
+    top: 65%;
+    left: 85%;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-30px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.content {
+    text-align: center;
+    z-index: 2;
+    color: white;
+}
+
+.title {
+    font-size: 3rem;
+    font-weight: 800;
+    background: linear-gradient(90deg, #ff004c, #800020);
+    background-clip: text;
+        -webkit-background-clip: text;
+    color: transparent;
+    letter-spacing: 2px;
+}
+
+.subtitle {
+    font-size: 1rem;
+    color: #aaa;
+    letter-spacing: 3px;
+    margin-top: 5px;
+    text-transform: uppercase;
+}
+
+/* =========================
+   SPINNER LOADER
+========================= */
+
+.spinner {
+    width: 80px;
+    height: 80px;
+    margin: 25px auto;
+    position: relative;
+}
+
+.ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    border-top: 2px solid #ff004c;
+    animation: spin 1.2s linear infinite;
+    filter: drop-shadow(0 0 6px rgba(255, 0, 76, 0.5));
+}
+
+.ring:nth-child(2) {
+    inset: 10px;
+    border-top: 2px solid #800020;
+    animation-duration: 1.6s;
+    opacity: 0.8;
+}
+
+.ring:nth-child(3) {
+    inset: 20px;
+    border-top: 2px solid #ff3b6b;
+    animation-duration: 2s;
+    opacity: 0.6;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* =========================
+   TYPING TEXT
+========================= */
+
+.typing {
+    font-size: 0.9rem;
+    color: #bbb;
+    min-height: 20px;
+    margin-top: 10px;
+}
