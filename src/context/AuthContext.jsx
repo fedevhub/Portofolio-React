@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useState } from "react";
 import supabase from "../assets/supabase-client";
 
@@ -9,35 +10,44 @@ export function AuthProvider({ children }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        getSession();
+        let active = true;
 
-        const { data: listener } = supabase.auth.onAuthStateChange(() => {
-            getSession();
-        });
+        async function syncSession() {
+            const { data } = await supabase.auth.getUser();
 
-        return () => listener.subscription.unsubscribe();
-    }, []);
+            if (!active) return;
 
-    const getSession = async () => {
-        const { data } = await supabase.auth.getUser();
+            if (data.user) {
+                setUser(data.user);
 
-        if (data.user) {
-            setUser(data.user);
+                const { data: profile } = await supabase
+                    .from("profiles")
+                    .select("role")
+                    .eq("id", data.user.id)
+                    .maybeSingle();
 
-            const { data: profile } = await supabase
-                .from("profiles")
-                .select("role")
-                .eq("id", data.user.id)
-                .maybeSingle();
+                if (!active) return;
 
-            setRole(profile?.role);
-        } else {
-            setUser(null);
-            setRole(null);
+                setRole(profile?.role);
+            } else {
+                setUser(null);
+                setRole(null);
+            }
+
+            setLoading(false);
         }
 
-        setLoading(false);
-    };
+        syncSession();
+
+        const { data: listener } = supabase.auth.onAuthStateChange(() => {
+            syncSession();
+        });
+
+        return () => {
+            active = false;
+            listener.subscription.unsubscribe();
+        };
+    }, []);
 
     const login = async (email, password) => {
         return await supabase.auth.signInWithPassword({ email, password });

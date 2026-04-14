@@ -132,19 +132,66 @@ body[data-theme="light"] {
     color: var(--nav-text);
 }
 
-.site-nav .nav-link {
+.site-nav .navbar-nav {
+    gap: 6px;
+    align-items: center;
+}
+
+.site-nav .navbar-nav a.nav-link {
     color: var(--nav-text);
-    padding: 12px;
-    transition: color var(--transition-base);
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 16px;
+    border-radius: 999px;
+    font-weight: 500;
+    transition:
+        color var(--transition-base),
+        background-color var(--transition-base),
+        transform var(--transition-base),
+        box-shadow var(--transition-base);
 }
 
-.site-nav .nav-link:hover {
+.site-nav .navbar-nav a.nav-link::after {
+    content: "";
+    position: absolute;
+    left: 14px;
+    right: 14px;
+    bottom: 7px;
+    height: 2px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--maroon-primary), var(--maroon-accent));
+    transform: scaleX(0);
+    transform-origin: left;
+    opacity: 0.45;
+    transition: transform var(--transition-base), opacity var(--transition-base);
+}
+
+.site-nav .navbar-nav a.nav-link:hover,
+.site-nav .navbar-nav a.nav-link:focus-visible {
     color: var(--maroon-accent);
+    background: rgba(var(--maroon-accent-rgb), 0.08);
+    transform: translateY(-1px);
 }
 
-.site-nav .nav-link.active {
-    color: var(--maroon-primary);
+.site-nav .navbar-nav a.nav-link:hover::after,
+.site-nav .navbar-nav a.nav-link:focus-visible::after,
+.site-nav .navbar-nav a.nav-link.active::after {
+    transform: scaleX(1);
+    opacity: 1;
+}
+
+.site-nav .navbar-nav a.nav-link.active {
+    color: var(--maroon-accent);
     font-weight: 600;
+    background: transparent;
+    box-shadow: none;
+}
+
+.site-nav .navbar-nav a.nav-link.active:hover,
+.site-nav .navbar-nav a.nav-link.active:focus-visible {
+    background: transparent;
 }
 
 .site-nav .navbar-toggler {
@@ -162,4 +209,56 @@ body[data-theme="light"] {
 :root[data-theme="light"] .site-nav .navbar-toggler-icon,
 body[data-theme="light"] .site-nav .navbar-toggler-icon {
     filter: none;
+}
+
+.logout-btn {
+    border: 1px solid rgba(220, 53, 69, 0.55);
+    background: rgba(220, 53, 69, 0.18);
+    margin-top: 3px;
+    margin-left: 4px;
+    color: #ff4d5a;
+    font: inherit;
+    cursor: pointer;
+    padding: 0.35rem 0.9rem;
+    border-radius: 10px;
+    line-height: 1;
+    min-width: 90px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+    background: rgba(220, 53, 69, 0.35);
+    border-color: #ff4d5a;
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.25);
+}
+
+.logout-btn:active {
+    transform: scale(0.97);
+}
+
+@media (max-width: 480px) {
+    .logout-btn {
+        margin-left: -2px;
+    }
+}
+
+@media (max-width: 991px) {
+    .site-nav .navbar-nav {
+        align-items: flex-start;
+    }
+
+    .site-nav .navbar-nav a.nav-link {
+        width: fit-content;
+        justify-content: flex-start;
+    }
+
+    .site-nav .navbar-nav a.nav-link::after {
+        left: 16px;
+        right: 16px;
+    }
 }

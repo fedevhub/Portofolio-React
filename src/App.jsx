@@ -1,4 +1,7 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 
 import About from "./components/About";
 import Home from "./components/Home";
@@ -15,7 +18,6 @@ import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./context/ProtectedRoute";
 
 import Login from "./Admin/Login";
-import Admin from "./Admin/Admin";
 
 function BackgroundLayer() {
   return (
@@ -59,21 +61,41 @@ function LandingPage() {
   );
 }
 
+function AosManager() {
+  const location = useLocation();
+
+  useEffect(() => {
+    AOS.init({
+      duration: 700,
+      delay: 0,
+      easing: "ease-out-cubic",
+      once: true,
+      offset: 40,
+    });
+  }, []);
+
+  useEffect(() => {
+    AOS.refreshHard();
+  }, [location.pathname, location.hash]);
+
+  return null;
+}
+
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
+        <AosManager />
         <Routes>
           <Route path="/" element={<LandingPage />} />
 
           <Route path="/admin" element={<Login />} />
 
-          <Route path="/admin/dashboard" element={<LandingPage />} />
           <Route
             path="/admin/dashboard"
             element={
               <ProtectedRoute>
-                <Admin />
+                <LandingPage />
               </ProtectedRoute>
             }
           />

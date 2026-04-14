@@ -1,9 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import AOS from "aos";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import supabase from "../assets/supabase-client";
 import "../styles/Project.css";
 import { useAuth } from "../context/AuthContext";
-import { useLocation } from "react-router-dom";
+import { isKnownSectionId } from "../utils/sectionNavigation";
+import {
+  consumeSectionTarget,
+  rememberSectionTarget,
+  scrollToSectionId,
+} from "../utils/sectionScroll";
 
 const FILTERS = [
   { label: "All", value: "all" },
@@ -12,6 +18,22 @@ const FILTERS = [
   { label: "UI/UX Design", value: "ui-ux" },
 ];
 
+const STATUS_PRIORITY = {
+  completed: 1,
+  "in repair": 2,
+  "on progress": 3,
+  "on going": 4,
+};
+
+const STATUS_META = {
+  completed: { text: "Completed", class: "done" },
+  "in repair": { text: "In Repair", class: "repair" },
+  "on progress": { text: "On Progress", class: "progress" },
+  "on going": { text: "On Going", class: "ongoing" },
+};
+
+const PROJECT_CARD_AOS = ["fade-up-right", "zoom-in-up", "fade-up-left"];
+
 const EMPTY_FORM = {
   nama: "",
   deskripsi: "",
@@ -19,10 +41,11 @@ const EMPTY_FORM = {
   toolsInput: "",
   kategori: "landing-page",
   file: null,
-  status: false,
+  status: "on going",
   preview_url: "",
   github_url: "",
 };
+
 
 function getIsAdmin(role) {
   return role === "admin";
@@ -86,7 +109,24 @@ function normalizeProject(project) {
     fitur: getFiturList(project),
     preview_url: project.preview_url ?? "",
     github_url: project.github_url ?? "",
+    status: normalizeStatus(project.status),
   };
+}
+
+function normalizeStatus(value) {
+  if (value === true || value === "true" || value === 1) {
+    return "completed";
+  }
+
+  if (typeof value === "string" && STATUS_PRIORITY[value]) {
+    return value;
+  }
+
+  return "on going";
+}
+
+function getProjectStatusMeta(status) {
+  return STATUS_META[normalizeStatus(status)] ?? STATUS_META["on going"];
 }
 
 async function uploadProjectFile(file) {
@@ -104,13 +144,35 @@ async function uploadProjectFile(file) {
 }
 
 async function fetchProjectsFromDb() {
-  const { data, error } = await supabase.from("Project").select("*").order("id", { ascending: false });
+  const { data, error } = await supabase
+    .from("Project")
+    .select("*");
 
   if (error) {
     throw error;
   }
 
-  return (data ?? []).map(normalizeProject);
+  const normalized = (data ?? []).map(normalizeProject);
+
+  return normalized.sort((a, b) => {
+    const statusA = STATUS_PRIORITY[a.status] ?? 99;
+    const statusB = STATUS_PRIORITY[b.status] ?? 99;
+
+    if (statusA !== statusB) {
+      return statusA - statusB;
+    }
+
+    const createdAtA = Date.parse(a.created_at ?? "");
+    const createdAtB = Date.parse(b.created_at ?? "");
+    const hasCreatedAtA = !Number.isNaN(createdAtA);
+    const hasCreatedAtB = !Number.isNaN(createdAtB);
+
+    if (hasCreatedAtA && hasCreatedAtB && createdAtA !== createdAtB) {
+      return createdAtB - createdAtA;
+    }
+
+    return Number(b.id ?? 0) - Number(a.id ?? 0);
+  });
 }
 
 async function fetchProjectById(projectId) {
@@ -141,23 +203,45 @@ function buildPayload(formData, existingFileUrl = null) {
   };
 }
 
-function ProjectForm({
-  formData,
-  onChange,
-  onSubmit,
-  saving,
-  submitLabel,
-  submitHint,
-}) {
+function navigateToProjectSection(navigate) {
+  rememberSectionTarget("project");
+  navigate("/admin/dashboard#project");
+}
+
+function ProjectForm({ formData, onChange, onSubmit, saving, submitLabel, submitHint, existingImageUrl, onBack }) {
+  const [imagePreview, setImagePreview] = useState(existingImageUrl || null);
+
+  const handleFileChange = (event) => {
+    const file = event.target.files?.[0] ?? null;
+    onChange("file", file);
+
+    if (file) {
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreview(previewUrl);
+    } else {
+      setImagePreview(existingImageUrl || null);
+    }
+  };
+
+  // Cleanup preview URL saat komponen unmount (jika perlu)
+  useEffect(() => {
+    return () => {
+      if (imagePreview && imagePreview.startsWith("blob:")) {
+        URL.revokeObjectURL(imagePreview);
+      }
+    };
+  }, [imagePreview]);
+
   return (
     <form className="project-form" onSubmit={onSubmit}>
       <div className="project-form-grid">
+        {/* Nama Project & Kategori */}
         <label className="project-field">
           <span>Nama Project</span>
           <input
             type="text"
             value={formData.nama}
-            onChange={(event) => onChange("nama", event.target.value)}
+            onChange={(e) => onChange("nama", e.target.value)}
             placeholder="Contoh: Portfolio React"
             required
           />
@@ -167,9 +251,9 @@ function ProjectForm({
           <span>Kategori</span>
           <select
             value={formData.kategori}
-            onChange={(event) => onChange("kategori", event.target.value)}
+            onChange={(e) => onChange("kategori", e.target.value)}
           >
-            {FILTERS.filter((filter) => filter.value !== "all").map((filter) => (
+            {FILTERS.filter((f) => f.value !== "all").map((filter) => (
               <option key={filter.value} value={filter.value}>
                 {filter.label}
               </option>
@@ -177,208 +261,342 @@ function ProjectForm({
           </select>
         </label>
 
+        {/* Link Preview & Link GitHub */}
+        <label className="project-field">
+          <span>Link Preview (demo)</span>
+          <input
+            type="url"
+            value={formData.preview_url}
+            onChange={(e) => onChange("preview_url", e.target.value)}
+            placeholder="https://..."
+          />
+        </label>
+
+        <label className="project-field">
+          <span>Link GitHub</span>
+          <input
+            type="url"
+            value={formData.github_url}
+            onChange={(e) => onChange("github_url", e.target.value)}
+            placeholder="https://github.com/..."
+          />
+        </label>
+
+        {/* Deskripsi - full width */}
         <label className="project-field project-field-full">
           <span>Deskripsi</span>
           <textarea
-            rows="5"
+            rows="4"
             value={formData.deskripsi}
-            onChange={(event) => onChange("deskripsi", event.target.value)}
+            onChange={(e) => onChange("deskripsi", e.target.value)}
             placeholder="Ceritakan singkat project ini"
             required
           />
         </label>
 
-        <label className="project-field project-field-full">
+        {/* Fitur & Tools - sebaris */}
+        <label className="project-field">
           <span>Fitur</span>
           <textarea
             rows="3"
             value={formData.fiturInput}
             onChange={(e) => onChange("fiturInput", e.target.value)}
-            placeholder="Login, Dashboard, CRUD Data (pisahkan dengan koma atau enter)"
+            placeholder="Login, Dashboard, CRUD (pisahkan koma/enter)"
           />
         </label>
 
-        <label className="project-field project-field-full">
+        <label className="project-field">
           <span>Tools</span>
           <textarea
             rows="3"
             value={formData.toolsInput}
             onChange={(e) => onChange("toolsInput", e.target.value)}
-            placeholder="React, Supabase, Bootstrap (pisahkan dengan koma atau enter)"
+            placeholder="React, Supabase, Bootstrap"
           />
         </label>
 
-
-        <label className="project-field">
-          <span>Thumbnail</span>
+        {/* Thumbnail & Checkbox - sebaris */}
+        <div className="project-field">
           <input
             type="file"
             accept="image/*"
-            onChange={(event) => onChange("file", event.target.files?.[0] ?? null)}
+            onChange={handleFileChange}
+            className="file-input"
           />
+        </div>
+
+        <label className="project-field custom-checkbox-wrapper">
+          <select
+            value={formData.status}
+            onChange={(e) => onChange("status", e.target.value)}
+          >
+            <option value="completed">Completed</option>
+            <option value="in repair">In Repair</option>
+            <option value="on progress">On Progress</option>
+            <option value="on going">On Going</option>
+          </select>
         </label>
 
-        <label className="project-field project-checkbox">
-          <input
-            type="checkbox"
-            checked={formData.status}
-            onChange={(event) => onChange("status", event.target.checked)}
-          />
-          <span>Project selesai</span>
-        </label>
-
-        <label className="project-field project-field-full">
-          <span>Link Preview</span>
-          <input
-            type="text"
-            value={formData.preview_url}
-            onChange={(e) => onChange("preview_url", e.target.value)}
-          />
-        </label>
-
-        <label className="project-field project-field-full">
-          <span>Link GitHub</span>
-          <input
-            type="text"
-            value={formData.github_url}
-            onChange={(e) => onChange("github_url", e.target.value)}
-          />
-        </label>
+        {/* Preview Gambar - full width di bawah baris thumbnail & checkbox */}
+        {imagePreview && (
+          <div className="project-field project-field-full thumbnail-preview-container">
+            <span>Preview Thumbnail</span>
+            <div className="thumbnail-preview">
+              <img src={imagePreview} alt="Thumbnail preview" />
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="project-form-actions">
-        <Link to="/#project" className="btn btn-outline-modern">
-          Kembali
-        </Link>
-        <button type="submit" className="btn btn-primary-modern" disabled={saving}>
+        <button
+          type="button"
+          className="btn btn-outline-modern"
+          onClick={onBack}
+        >
+          Back
+        </button>
+        <button type="submit" className="btn btn-add" disabled={saving}>
           {saving ? "Menyimpan..." : submitLabel}
         </button>
       </div>
 
       {submitHint && <p className="project-form-title">{submitHint}</p>}
     </form>
-  );
+  ); 
 }
 
 function ProjectDetailModal({ project, isAdmin, onClose }) {
+  const navigate = useNavigate();
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const tools = project ? getProjectTools(project) : [];
+  const features = project ? getFiturList(project) : [];
+  const hasPreviewLink = hasLink(project?.preview_url);
+  const hasGithubLink = hasLink(project?.github_url);
+
+  useEffect(() => {
+    if (!project) {
+      return undefined;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    const previousPaddingRight = document.body.style.paddingRight;
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+
+    document.body.style.overflow = "hidden";
+
+    if (scrollbarWidth > 0) {
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    }
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.body.style.paddingRight = previousPaddingRight;
+    };
+  }, [project]);
+
   if (!project) {
     return null;
   }
 
+  async function handleDelete(project) {
+    const { error } = await supabase
+      .from("Project")
+      .delete()
+      .eq("id", project.id);
+
+    if (error) {
+      console.error("Error deleting:", error);
+      return;
+    }
+
+    setDeleteTarget(null);
+    navigateToProjectSection(navigate);
+  }
+
+  const currentStatus = getProjectStatusMeta(project.status);
+
   return (
     <div className="project-modal-backdrop" onClick={onClose}>
-      <div className="project-modal-card project-detail-modal" onClick={(event) => event.stopPropagation()}>
-        <div className="project-modal-header">
-          <div>
-            <h3>{project.nama}</h3>
-            <p>Detail singkat project yang dipilih.</p>
-          </div>
+      <div className="project-detail-modal" onClick={(event) => event.stopPropagation()}>
 
-          <button type="button" className="project-close-btn" onClick={onClose}>
-            x
-          </button>
-        </div>
+        {/* Close Button */}
+        <button type="button" className="project-modal-close" onClick={onClose}>
+          ×
+        </button>
 
-        <div className="project-modal-body">
-          <div className="project-detail-gallery">
-            {project.file ? (
-              <img src={project.file} alt={project.nama} className="project-detail-image" />
-            ) : (
-              <div className="project-placeholder project-detail-placeholder">No Image</div>
+        <div className="project-modal-content">
+
+          {/* Left Side - Info */}
+          <div className="project-info-section" data-aos="fade-right" data-aos-duration="700">
+            <button
+              type="button"
+              className="project-modal-close project-editor-back-btn"
+              onClick={onClose}
+            >
+              <i className="bi bi-arrow-left"></i>
+              Close
+            </button>
+
+            <div className="project-title-area">
+              <h2>{project.nama}</h2>
+              <span className="project-subtitle">
+                {project.kategori === "landing-page" && "Landing Page Project"}
+                {project.kategori === "web-app" && "Web Application"}
+                {project.kategori === "ui-ux" && "UI/UX Design"}
+              </span>
+            </div>
+
+            <div className="project-accent-line"></div>
+
+            {/* Key Features */}
+            
+
+            {/* Technologies Used */}
+            {tools.length > 0 && (
+              <div className="project-tools-section">
+                <p className="tools-label">Technologies Used</p>
+                <div className="project-tools-tags">
+                  {tools.map((tool, index) => (
+                    <span key={index} className="tool-tag">
+                      <i className="bi bi-gear-fill"></i>
+                      {tool}
+                    </span>
+                  ))}
+                </div>
+              </div>
             )}
-          </div>
 
-          <div className="project-detail-grid">
-            <div className="project-detail-content">
-              <h5>Ringkasan</h5>
-              <p className="project-detail-text">{project.deskripsi}</p>
+            {/* Stats */}
+            <div className="project-stats-grid">
+              <div className="project-stat-card">
+                <div className="project-stat-icon">
+                  <i className="bi bi-code-slash"></i>
+                </div>
+                <div className="project-stat-info">
+                  <span className="project-stat-value">{tools.length}</span>
+                  <span className="project-stat-label">Total Teknologi</span>
+                </div>
+              </div>
 
-              <h5>Fitur</h5>
-              <ul className="project-feature-list">
-                {getFiturList(project).map((fitur, index) => (
-                  <li key={index}>{fitur}</li>
-                ))}
-              </ul>
-
-
-              <h5>Tools</h5>
-              <div className="card-tags">
-                {getProjectTools(project).map((tool, index) => (
-                  <span key={index} className="card-tag">
-                    {tool}
-                  </span>
-                ))}
+              <div className="project-stat-card">
+                <div className="project-stat-icon">
+                  <i className="bi bi-layers"></i>
+                </div>
+                <div className="project-stat-info">
+                  <span className="project-stat-value">{features.length}</span>
+                  <span className="project-stat-label">Fitur Utama</span>
+                </div>
               </div>
             </div>
 
-            <div className="project-detail-side">
-              <h6>Info Proyek</h6>
-              <ul className="project-detail-list">
-                <li>
-                  <strong>Kategori:</strong> {project.kategori ?? "landing-page"}
-                </li>
-                <li>
-                  <strong>Status:</strong> {project.status ? "Completed" : "On Progress"}
-                </li>
-                <li>
-                  <strong>Jumlah Tools:</strong> {getProjectTools(project).length}
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div className="project-modal-footer">
-          <div className="project-action-group">
-
-            <span className={`project-status ${project.status ? "done" : "progress"}`}>
-              {project.status ? "Completed" : "On Progress"}
-            </span>
-
-            {hasLink(project.preview_url) && (
-              <a
-                href={project.preview_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-preview"
-              >
-                Preview
-              </a>
+            {features.length > 0 && (
+              <div className="project-features-section">
+                <div className="features-header">
+                  <i className="bi bi-star"></i>
+                  <h4>Key Features</h4>
+                </div>
+                <div className="features-list">
+                  {features.slice(0, 10).map((feature, index) => (
+                    <div key={index} className="feature-item">
+                      {feature}
+                    </div>
+                  ))}
+                </div>
+              </div>
             )}
+          </div>
 
-            {hasLink(project.github_url) && (
-              <a
-                href={project.github_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-github"
-              >
-                GitHub
-              </a>
+          
+
+          <div className="project-preview-section" data-aos="fade-left" data-aos-duration="700" data-aos-delay="100">
+            {/* IMAGE */}
+            <div className="project-preview-container">
+              {project.file ? (
+                <img src={project.file} alt={project.nama} />
+              ) : (
+                <div className="project-preview-placeholder">
+                  No Preview Available
+                </div>
+              )}
+            </div>
+
+            {/* DESCRIPTION */}
+            <div className="project-description-wrapper">
+              <p className="project-description">
+                {project.deskripsi}
+              </p>
+            </div>
+
+            <p className={`project-status-text ${currentStatus.class}`}>
+              {currentStatus.text}
+            </p>
+
+            {(hasPreviewLink || hasGithubLink) && (
+              <div className="project-action-grid">
+                {hasPreviewLink && (
+                  <a
+                    href={project.preview_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn btn-live-demo project-modal-link-btn"
+                  >
+                    <i className="bi bi-eye"></i>
+                    Live Demo
+                  </a>
+                )}
+
+                {hasGithubLink && (
+                  <a
+                    href={project.github_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn btn-learn-more project-modal-link-btn"
+                  >
+                    <i className="bi bi-github"></i>
+                    Github
+                  </a>
+                )}
+              </div>
             )}
 
             {isAdmin && (
-              <Link
-                to={`/project/edit/${project.id}`}
-                className="btn btn-edit"
-              >
-                <i className="bi bi-pencil-square"></i>
-              </Link>
-            )}
+              <div className="project-action-inline">
+                <>
+                  <Link
+                    to={`/project/edit/${project.id}`}
+                    className="btn btn-edit"
+                    onClick={() => rememberSectionTarget("project")}
+                  >
+                    <i className="bi bi-pencil-square"></i>
+                    Edit
+                  </Link>
 
-            <button
-              type="button"
-              className="btn btn-close"
-              onClick={onClose}
-            >
-              Close
-            </button>
+                  <button
+                    type="button"
+                    className="btn btn-delete"
+                    onClick={() => setDeleteTarget(project)}
+                    aria-label={`Delete ${project.nama}`}
+                    title="Delete project"
+                  >
+                    <i className="bi bi-trash"></i>
+                    Delete
+                  </button>
+                </>
+              </div>
+            )}
           </div>
         </div>
       </div>
+      <DeleteConfirmModal
+        project={deleteTarget}
+        onCancel={() => setDeleteTarget(null)}
+        onConfirm={handleDelete}
+      />
     </div>
   );
 }
+
 
 function ProjectEditorPage({ mode }) {
   const navigate = useNavigate();
@@ -390,6 +608,30 @@ function ProjectEditorPage({ mode }) {
   const [loading, setLoading] = useState(isEditMode);
   const [saving, setSaving] = useState(false);
   const [currentProject, setCurrentProject] = useState(null);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      window.scrollTo(0, 0);
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
+  async function handleDelete(project) {
+    const { error } = await supabase
+      .from("Project")
+      .delete()
+      .eq("id", project.id);
+
+    if (error) {
+      console.error("Error deleting:", error);
+      return;
+    }
+
+    setDeleteTarget(null);
+    navigateToProjectSection(navigate);
+  }
 
 
   useEffect(() => {
@@ -413,7 +655,7 @@ function ProjectEditorPage({ mode }) {
           toolsInput: getProjectTools(project).join(", "),
           kategori: project.kategori ?? "landing-page",
           file: null,
-          status: Boolean(project.status),
+          status: normalizeStatus(project.status),
           preview_url: project.preview_url ?? "",
           github_url: project.github_url ?? "",
         });
@@ -445,15 +687,15 @@ function ProjectEditorPage({ mode }) {
   }
 
   async function handleSubmit(event) {
+    event.preventDefault();
+
     const fiturList = parseTools(formData.fiturInput);
 
     if (fiturList.length < 3) {
       alert("Minimal fitur harus 3!");
-      setSaving(false);
       return;
     }
 
-    event.preventDefault();
     setSaving(true);
 
     try {
@@ -479,10 +721,7 @@ function ProjectEditorPage({ mode }) {
         }
       }
 
-      navigate("/admin/dashboard");
-      setTimeout(() => {
-        document.getElementById("project")?.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 50);
+      navigateToProjectSection(navigate);
     } catch (error) {
       console.error("Error saving project:", error);
     } finally {
@@ -508,43 +747,62 @@ function ProjectEditorPage({ mode }) {
   return (
     <section className="portfolio-section project-page-shell">
       <div className="container">
-        <div className="project-admin-panel">
-          <div className="project-admin-header">
+        <div className={`project-admin-panel project-editor-panel ${isEditMode ? "edit-mode" : "add-mode"}`}>
+          <div className="project-admin-header project-editor-header">
             <div>
-              <p className="project-page-kicker">Admin Project</p>
-              <h3>{isEditMode ? "Edit Project" : "Tambah Project"}</h3>
-              <p>
-                {isEditMode
-                  ? "Edit project di halaman khusus biar lebih lega."
-                  : "Tambah project baru lewat halaman khusus admin."}
-              </p>
+              <h3>{isEditMode ? "Edit Project" : "Add Project"}</h3>
             </div>
 
-            {isEditMode && currentProject && (
+            <div className="project-editor-actions">
               <button
                 type="button"
-                className="btn project-danger-btn"
-                onClick={() => setDeleteTarget(currentProject)}
+                className="btn btn-outline-modern project-editor-back-btn"
+                onClick={() => navigateToProjectSection(navigate)}
               >
-                <i className="bi bi-trash"></i>
+                <i className="bi bi-arrow-left"></i>
+                Back
               </button>
-            )}
+              {isEditMode && currentProject && (
+                <button
+                  type="button"
+                  className="btn project-editor-delete-btn"
+                  onClick={() => setDeleteTarget(currentProject)}
+                >
+                  <i className="bi bi-trash"></i>
+                  Delete
+                </button>
+              )}
+            </div>
           </div>
 
           {loading ? (
-            <p className="project-empty">Memuat data project...</p>
+            <div className="project-editor-stage is-loading">
+              <div className="project-editor-loading">
+              <div className="project-editor-loader"></div>
+              <p>Memuat data project...</p>
+              </div>
+            </div>
           ) : (
-            <ProjectForm
-              formData={formData}
-              onChange={updateForm}
-              onSubmit={handleSubmit}
-              saving={saving}
-              submitLabel={isEditMode ? "Simpan Perubahan" : "Tambah Project"}
-              submitHint={isEditMode ? `Sedang mengedit: ${currentProject?.nama ?? "-"}` : "Form ini akan menambahkan project baru."}
-            />
+              <div className="project-editor-stage is-ready">
+                <ProjectForm
+                formData={formData}
+                onChange={updateForm}
+                onSubmit={handleSubmit}
+                saving={saving}
+                submitLabel={isEditMode ? "Save Change" : "Add Project"}
+                submitHint={isEditMode ? `Sedang mengedit: ${currentProject?.nama ?? "-"}` : "Form ini akan menambahkan project baru."}
+                existingImageUrl={currentProject?.file || null}
+                onBack={() => navigateToProjectSection(navigate)}
+              />
+              </div>
           )}
         </div>
       </div>
+      <DeleteConfirmModal
+        project={deleteTarget}
+        onCancel={() => setDeleteTarget(null)}
+        onConfirm={handleDelete}
+      />
     </section>
   );
 }
@@ -561,6 +819,20 @@ export default function Project() {
 
   const location = useLocation();
 
+  useEffect(() => {
+    const hashTarget = location.hash.replace("#", "");
+    const rememberedTarget = consumeSectionTarget();
+    const targetId = isKnownSectionId(hashTarget) ? hashTarget : rememberedTarget;
+
+    if (!targetId) return;
+
+    const timer = setTimeout(() => {
+      scrollToSectionId(targetId, { behavior: "smooth" });
+    }, 120);
+
+    return () => clearTimeout(timer);
+  }, [location.hash, location.pathname]);
+  
   const isAdmin =
     role === "admin" && location.pathname.startsWith("/admin");
 
@@ -593,6 +865,18 @@ export default function Project() {
   useEffect(() => {
     setCurrentPage(1);
   }, [activeFilter]);
+
+  useEffect(() => {
+    if (loading) {
+      return;
+    }
+
+    const refreshAos = window.requestAnimationFrame(() => {
+      AOS.refreshHard();
+    });
+
+    return () => window.cancelAnimationFrame(refreshAos);
+  }, [loading, activeFilter, currentPage, selectedProject]);
 
   const filteredProjects = useMemo(() => {
     if (activeFilter === "all") {
@@ -644,23 +928,27 @@ export default function Project() {
 
       <section id="project" className="portfolio-section">
         <div className="container">
-          <div className="section-title animate-fade-in-up">
-            <h2 className="highlight">Project</h2>
-            <p className="highlight-text mt-3">Koleksi project terbaik yang telah saya kerjakan</p>
+          <div className="section-title animate-fade-in-up" data-aos="fade-right">
+            <h2 className="highlight">My Projects</h2>
+            <p className="highlight-text mt-3">A collection of projects resulting from my learning and exploration in the world of web development.</p>
           </div>
 
           {isAdmin && (
-            <div className="project-top-actions">
-              <Link to="/project/add" className="btn btn-add">
+            <div className="project-top-actions" data-aos="zoom-in-left" data-aos-delay="100">
+              <Link
+                to="/project/add"
+                className="btn btn-add"
+                onClick={() => rememberSectionTarget("project")}
+              >
                 <span className="icon-plus">
                   <i className="bi bi-plus-lg"></i>
                 </span>
-                Tambah Project
+                Add Project
               </Link>
             </div>
           )}
 
-          <div className="card-filter animate-fade-in-up">
+          <div className="card-filter animate-fade-in-up" data-aos="fade-left" data-aos-delay="150">
             {FILTERS.map((filter) => (
               <button
                 key={filter.value}
@@ -674,23 +962,52 @@ export default function Project() {
           </div>
 
           {loading ? (
-            <p className="project-empty">Project is loading...</p>
+            <div className="project-loading-panel" data-aos="zoom-in-up">
+              <div className="project-loading-spinner"></div>
+              <p className="project-empty">Project is loading...</p>
+            </div>
           ) : filteredProjects.length === 0 ? (
             <p className="project-empty">There are no projects in this category yet.</p>
           ) : (
             <div className="card-container mt-5">
-              {paginatedProjects.map((project) => (
-                <article key={project.id} className="card project-card">
-                  <div className="img-wrapper">
-                    {project.file ? (
-                      <img src={project.file} alt={project.nama} className="project-image" />
-                    ) : (
-                      <div className="project-placeholder">No Image</div>
-                    )}
+              {paginatedProjects.map((project, index) => {
+                const showPreview = hasLink(project.preview_url);
+                const showGithub = hasLink(project.github_url);
+                const linkCount = Number(showPreview) + Number(showGithub);
+                const hasFooterActions = true;
+                const statusMeta = getProjectStatusMeta(project.status);
+
+                return (
+                <article
+                  key={project.id}
+                  className="card project-card"
+                  data-aos={PROJECT_CARD_AOS[index % PROJECT_CARD_AOS.length]}
+                  data-aos-delay={(index % itemsPerPage) * 70}
+                >
+                  <div className="project-visual-trigger" aria-hidden="true">
+                    <div className="img-wrapper">
+                      <span className={`project-status-badge ${statusMeta.class}`}>
+                        {statusMeta.text}
+                      </span>
+
+                      {project.file ? (
+                        <img src={project.file} alt={project.nama} className="project-image" />
+                      ) : (
+                        <div className="project-placeholder">No Image</div>
+                      )}
+                    </div>
                   </div>
 
                   <div className="card-body">
-                    <h5 className="card-title">{project.nama}</h5>
+                    <h5 className="card-title">
+                      <button
+                        type="button"
+                        className="project-title-trigger"
+                        onClick={() => setSelectedProject(project)}
+                      >
+                        {project.nama}
+                      </button>
+                    </h5>
                     <p className="card-text">{project.deskripsi}</p>
 
                     {/* <div className="card-tags">
@@ -702,52 +1019,59 @@ export default function Project() {
                     </div> */}
 
                     {/* ================= PROJECT CARD ================= */}
-                    <div className="project-card-footer">
-                      <div className={`project-action-group ${isAdmin ? "admin" : "user"}`}>
+                    {hasFooterActions && (
+                      <div className="project-card-footer">
+                        <div className="project-card-actions-stack">
+                            {linkCount > 0 && (
+                              <div className={`project-link-actions ${linkCount === 1 ? "single-link" : "dual-link"}`}>
+                                {showPreview && (
+                                  <a href={project.preview_url} target="_blank" rel="noreferrer" className="btn btn-preview">
+                                    <i className="bi bi-eye"></i> Preview
+                                  </a>
+                                )}
+                                <button type="button" className="btn btn-detail" onClick={() => setSelectedProject(project)}>
+                                  <i className="bi bi-info-circle"></i> Detail
+                                </button>
+                              </div>
+                            )}
 
-                        {hasLink(project.preview_url) && (
-                          <a
-                            href={project.preview_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="btn btn-preview"
-                          >
-                            Preview<i className="bi bi-eye"></i>
-                          </a>
-                        )}
+                            {linkCount === 0 && (
+                              <div className="project-link-actions single-link">
+                                <button type="button" className="btn btn-detail" onClick={() => setSelectedProject(project)}>
+                                  <i className="bi bi-info-circle"></i> Detail
+                                </button>
+                              </div>
+                            )}
 
-                        <button
-                          type="button"
-                          className="btn btn-detail"
-                          onClick={() => setSelectedProject(project)}
-                        >
-                          Detail<i className="bi bi-arrow-right"></i>
-                        </button>
+                          {isAdmin && (
+                            <div className="project-admin-actions">
+                              <Link
+                                to={`/project/edit/${project.id}`}
+                                className="btn btn-edit"
+                                onClick={() => rememberSectionTarget("project")}
+                                aria-label={`Edit ${project.nama}`}
+                                title="Edit project"
+                              >
+                                <i className="bi bi-pencil-square"></i>
+                              </Link>
 
-                        {isAdmin && (
-                          <>
-                            <Link
-                              to={`/project/edit/${project.id}`}
-                              className="btn btn-edit"
-                            >
-                              <i className="bi bi-pencil-square"></i>
-                            </Link>
-
-                            <button
-                              type="button"
-                              className="btn btn-delete"
-                              onClick={() => setDeleteTarget(project)}
-                            >
-                              <i className="bi bi-trash"></i>
-                            </button>
-                          </>
-                        )}
-
+                              <button
+                                type="button"
+                                className="btn btn-delete"
+                                onClick={() => setDeleteTarget(project)}
+                                aria-label={`Delete ${project.nama}`}
+                                title="Delete project"
+                              >
+                                <i className="bi bi-trash"></i>
+                              </button>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </article>
-              ))}
+              )})}
             </div>
           )}
         </div>
@@ -809,28 +1133,52 @@ export function DeleteProjectPage() {
 }
 
 function DeleteConfirmModal({ project, onCancel, onConfirm }) {
+  useEffect(() => {
+    if (!project) {
+      return undefined;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    const previousPaddingRight = document.body.style.paddingRight;
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+
+    document.body.style.overflow = "hidden";
+
+    if (scrollbarWidth > 0) {
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    }
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.body.style.paddingRight = previousPaddingRight;
+    };
+  }, [project]);
+
   if (!project) return null;
 
   return (
-    <div className="project-modal-backdrop" onClick={onCancel}>
-      <div className="project-modal-card" onClick={(e) => e.stopPropagation()}>
-        <div className="project-modal-header">
+    <div className="delete-modal-backdrop" onClick={onCancel}>
+      <div className="delete-modal-card" onClick={(e) => e.stopPropagation()} data-aos="zoom-in-up">
+        <div className="delete-modal-header">
           <button
             type="button"
-            className="project-close-btn btn-exit"
+            className="delete-close-btn"
             onClick={onCancel}
           >
             ×
           </button>
         </div>
 
-        <div className="project-modal-body">
+        <div className="delete-modal-body">
           <p>
             Yakin mau hapus project <strong>{project.nama}</strong>?
           </p>
+          <p style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.5)', marginTop: '12px' }}>
+            Data yang dihapus tidak dapat dikembalikan.
+          </p>
         </div>
 
-        <div className="project-modal-footer">
+        <div className="delete-modal-footer">
           <button className="btn btn-outline-modern" onClick={onCancel}>
             Batal
           </button>

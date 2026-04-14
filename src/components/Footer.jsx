@@ -3,9 +3,9 @@ import "../styles/Footer.css";
 export default function Footer() {
     return (
         <section id="contact">
-            <footer className="footer text-white site-footer" data-aos="fade-up">
+            <footer className="footer text-white site-footer">
                 <div className="container footer-grid">
-                    <div className="footer-info">
+                    <div className="footer-info" data-aos="fade-right">
                         <h3 className="footer-title">Lets Collaborate</h3>
                         <p className="footer-subtitle">Terbuka untuk kolaborasi, magang, atau proyek freelance.</p>
                         <ul className="footer-list">
@@ -24,7 +24,7 @@ export default function Footer() {
                         </ul>
                     </div>
 
-                    <div className="footer-social">
+                    <div className="footer-social" data-aos="fade-left" data-aos-delay="100">
                         <h3 className="footer-title">Find Me Online</h3>
                         <div className="footer-social-grid">
                             <a href="https://www.instagram.com/xnrzfii_ran?igsh=MWV1Y3o3MGZvZjFtZQ==" target="_blank"
@@ -54,7 +54,7 @@ export default function Footer() {
                 </div>
 
                 <div className="footer-bottom">
-                    <p>&copy; 2026 Fitri. All rights reserved.</p>
+                    <p>&copy; 2026 Fitri ✦ All rights reserved.</p>
                 </div>
             </footer>
         </section>
