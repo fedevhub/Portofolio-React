@@ -5,7 +5,7 @@ export default function Footer() {
         <section id="contact">
             <footer className="footer text-white site-footer">
                 <div className="container footer-grid">
-                    <div className="footer-info" data-aos="fade-right">
+                    <div className="footer-info" data-aos="fade-up">
                         <h3 className="footer-title">Let’s Work Together</h3>
                         <p className="footer-subtitle">Open for projects & collaborations</p>
                         <ul className="footer-list">
@@ -24,7 +24,7 @@ export default function Footer() {
                         </ul>
                     </div>
 
-                    <div className="footer-social" data-aos="fade-left" data-aos-delay="100">
+                    <div className="footer-social" data-aos="fade-up" data-aos-delay="100">
                         <h3 className="footer-title">Find Me Online</h3>
                         <div className="footer-social-grid">
                             <a href="https://www.instagram.com/xnrzfii_ran?igsh=MWV1Y3o3MGZvZjFtZQ==" target="_blank"

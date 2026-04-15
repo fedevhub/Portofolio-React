@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import AOS from "aos";
+import "aos/dist/aos.css";
 import "../styles/Skills.css";
 import supabase from "../assets/supabase-client";
 import { useAuth } from "../context/AuthContext";
@@ -11,25 +12,22 @@ const INITIAL_FORM = {
   color: "#ffffff",
 };
 
-const SKILL_CARD_AOS = ["zoom-in-up", "fade-up", "zoom-in-down", "fade-left", "fade-right"];
+
+const SKILL_CARD_AOS = ["fade-up"];
 
 function sortSkillsOldestFirst(items) {
   return [...items].sort((a, b) => {
     const createdIdA = Number(a.created_id);
     const createdIdB = Number(b.created_id);
-    const hasCreatedIdA = !Number.isNaN(createdIdA);
-    const hasCreatedIdB = !Number.isNaN(createdIdB);
 
-    if (hasCreatedIdA && hasCreatedIdB && createdIdA !== createdIdB) {
+    if (!Number.isNaN(createdIdA) && !Number.isNaN(createdIdB)) {
       return createdIdA - createdIdB;
     }
 
     const createdAtA = Date.parse(a.created_at ?? "");
     const createdAtB = Date.parse(b.created_at ?? "");
-    const hasCreatedAtA = !Number.isNaN(createdAtA);
-    const hasCreatedAtB = !Number.isNaN(createdAtB);
 
-    if (hasCreatedAtA && hasCreatedAtB && createdAtA !== createdAtB) {
+    if (!Number.isNaN(createdAtA) && !Number.isNaN(createdAtB)) {
       return createdAtA - createdAtB;
     }
 
@@ -48,6 +46,7 @@ export default function Skills() {
     () => (typeof window !== "undefined" && window.innerWidth <= 768 ? 6 : 12)
   );
   const [deleteTarget, setDeleteTarget] = useState(null);
+
   const { role } = useAuth();
   const location = useLocation();
   const lastBaseVisibleRef = useRef(isMobile ? 6 : 12);
@@ -57,28 +56,37 @@ export default function Skills() {
   const displayedSkills = skills.slice(0, visibleCount);
 
   useEffect(() => {
+    AOS.init({
+      duration: 700,
+      easing: "ease-in-out",
+      once: true,
+      offset: 40,
+    });
+  }, []);
+
+  // responsive handler
+  useEffect(() => {
     const handleResize = () => {
       const mobile = window.innerWidth <= 768;
-      const nextBaseVisible = mobile ? 6 : 12;
-      const previousBaseVisible = lastBaseVisibleRef.current;
+      const nextBase = mobile ? 6 : 12;
+      const prevBase = lastBaseVisibleRef.current;
 
       setIsMobile(mobile);
-      setVisibleCount((current) => {
-        if (current <= previousBaseVisible) {
-          return nextBaseVisible;
-        }
 
-        return Math.max(current, nextBaseVisible);
+      setVisibleCount((current) => {
+        if (current <= prevBase) return nextBase;
+        return Math.max(current, nextBase);
       });
-      lastBaseVisibleRef.current = nextBaseVisible;
+
+      lastBaseVisibleRef.current = nextBase;
     };
 
     handleResize();
     window.addEventListener("resize", handleResize);
-
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // load data
   useEffect(() => {
     let active = true;
 
@@ -94,12 +102,10 @@ export default function Skills() {
     }
 
     loadSkills();
-
-    return () => {
-      active = false;
-    };
+    return () => (active = false);
   }, []);
 
+  // refresh AOS
   useEffect(() => {
     AOS.refreshHard();
   }, [skills, deleteTarget, editId, visibleCount]);
@@ -119,15 +125,15 @@ export default function Skills() {
       .single();
 
     if (!error && data) {
-      setSkills((current) => sortSkillsOldestFirst([...current, data]));
-      setVisibleCount((current) => Math.max(current + 1, maxVisible));
+      setSkills((prev) => sortSkillsOldestFirst([...prev, data]));
+      setVisibleCount((c) => Math.max(c + 1, maxVisible));
       resetForm();
     }
   }
 
   async function handleDelete(id) {
     await supabase.from("Skills").delete().eq("id", id);
-    setSkills((current) => current.filter((item) => item.id !== id));
+    setSkills((prev) => prev.filter((item) => item.id !== id));
     setDeleteTarget(null);
   }
 
@@ -147,9 +153,9 @@ export default function Skills() {
       .eq("id", editId);
 
     if (!error) {
-      setSkills((current) =>
+      setSkills((prev) =>
         sortSkillsOldestFirst(
-          current.map((item) =>
+          prev.map((item) =>
             item.id === editId ? { ...item, ...form } : item
           )
         )
@@ -161,21 +167,45 @@ export default function Skills() {
   return (
     <section id="tools" className="skills-section">
       <div className="container">
-        <div className="section-heading" data-aos="fade-right">
-          <h1 className="skills-title">Tools & Technologies</h1>
-          <p className="section-subtitle">
+
+        {/* 🔥 HEADING (smooth hierarchy) */}
+        <div
+          className="section-heading"
+          data-aos="fade-up"
+          data-aos-duration="800"
+          data-aos-easing="ease-out-cubic"
+        >
+          <h1
+            className="skills-title"
+            data-aos="fade-up"
+            data-aos-delay="100"
+          >
+            Tools & Technologies
+          </h1>
+
+          <p
+            className="section-subtitle"
+            data-aos="fade-up"
+            data-aos-delay="200"
+          >
             The tools and technologies I’m currently learning and using to build applications and websites.
           </p>
         </div>
 
+        {/* 🔥 FORM ADMIN */}
         {isAdmin && (
-          <div className="skills-form" data-aos="fade-left" data-aos-delay="100">
+          <div
+            className="skills-form"
+            data-aos="fade-up"
+            data-aos-delay="150"
+            data-aos-duration="700"
+          >
             <input
               type="text"
               placeholder="Skill name"
               value={form.nama}
               onChange={(e) =>
-                setForm((current) => ({ ...current, nama: e.target.value }))
+                setForm((c) => ({ ...c, nama: e.target.value }))
               }
             />
 
@@ -184,7 +214,7 @@ export default function Skills() {
               placeholder="Icon name"
               value={form.icon}
               onChange={(e) =>
-                setForm((current) => ({ ...current, icon: e.target.value }))
+                setForm((c) => ({ ...c, icon: e.target.value }))
               }
             />
 
@@ -193,16 +223,15 @@ export default function Skills() {
                 type="color"
                 value={form.color}
                 onChange={(e) =>
-                  setForm((current) => ({ ...current, color: e.target.value }))
+                  setForm((c) => ({ ...c, color: e.target.value }))
                 }
               />
 
               <input
                 type="text"
-                placeholder="#ffffff"
                 value={form.color}
                 onChange={(e) =>
-                  setForm((current) => ({ ...current, color: e.target.value }))
+                  setForm((c) => ({ ...c, color: e.target.value }))
                 }
               />
             </div>
@@ -225,14 +254,17 @@ export default function Skills() {
           </div>
         )}
 
+        {/* 🔥 SKILL GRID */}
         <div className="skills-grid">
           <div className="skills-row">
             {displayedSkills.map((skill, index) => (
               <div
                 className="skill-card"
                 key={skill.id}
-                data-aos={SKILL_CARD_AOS[index % SKILL_CARD_AOS.length]}
-                data-aos-delay={(index % maxVisible) * 45}
+                data-aos="fade-up"
+                data-aos-delay="0"
+                data-aos-duration="700"
+                data-aos-easing="ease-out-cubic"
               >
                 <div
                   className="skill-icon"
@@ -248,7 +280,6 @@ export default function Skills() {
                     <button
                       className="btn btn-edit"
                       onClick={() => handleEdit(skill)}
-                      aria-label={`Edit ${skill.nama}`}
                     >
                       <i className="bi bi-pencil-square"></i>
                     </button>
@@ -256,7 +287,6 @@ export default function Skills() {
                     <button
                       className="btn btn-delete"
                       onClick={() => setDeleteTarget(skill)}
-                      aria-label={`Delete ${skill.nama}`}
                     >
                       <i className="bi bi-trash"></i>
                     </button>
@@ -267,11 +297,18 @@ export default function Skills() {
           </div>
         </div>
 
+        {/* 🔥 SHOW MORE */}
         {visibleCount < skills.length && (
-          <div className="show-more-wrapper" data-aos="zoom-in-up">
+          <div
+            className="show-more-wrapper"
+            data-aos="fade-up"
+            data-aos-delay="150"
+          >
             <button
               className="btn btn-show-more"
-              onClick={() => setVisibleCount((current) => current + maxVisible)}
+              onClick={() =>
+                setVisibleCount((c) => c + maxVisible)
+              }
             >
               Show More
               <i className="bi bi-arrow-down"></i>
@@ -291,34 +328,28 @@ export default function Skills() {
 
 function DeleteSkillModal({ skill, onCancel, onConfirm }) {
   useEffect(() => {
-    if (!skill) {
-      return undefined;
-    }
+    if (!skill) return;
 
-    const previousOverflow = document.body.style.overflow;
+    const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
     return () => {
-      document.body.style.overflow = previousOverflow;
+      document.body.style.overflow = prev;
     };
   }, [skill]);
 
-  if (!skill) {
-    return null;
-  }
+  if (!skill) return null;
 
   return (
     <div className="skill-delete-backdrop" onClick={onCancel}>
       <div
         className="skill-delete-modal"
-        onClick={(event) => event.stopPropagation()}
-        data-aos="zoom-in-up"
+        onClick={(e) => e.stopPropagation()}
+        data-aos="zoom-in"
+        data-aos-duration="500"
+        data-aos-easing="ease-out-cubic"
       >
-        <button
-          type="button"
-          className="skill-delete-close"
-          onClick={onCancel}
-        >
+        <button className="skill-delete-close" onClick={onCancel}>
           ×
         </button>
 
@@ -326,14 +357,14 @@ function DeleteSkillModal({ skill, onCancel, onConfirm }) {
           <p>
             Hapus skill <strong>{skill.nama}</strong>?
           </p>
-          <span>Data skill yang dihapus tidak bisa dikembalikan.</span>
+          <span>Data tidak bisa dikembalikan.</span>
         </div>
 
         <div className="skill-delete-actions">
-          <button type="button" className="btn btn-cancel" onClick={onCancel}>
+          <button className="btn btn-cancel" onClick={onCancel}>
             Cancel
           </button>
-          <button type="button" className="btn btn-delete" onClick={onConfirm}>
+          <button className="btn btn-delete" onClick={onConfirm}>
             Delete
           </button>
         </div>

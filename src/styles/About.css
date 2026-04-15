@@ -1,22 +1,58 @@
-.about-section .about {
+.about-section {
+    min-height: calc(var(--viewport-stable-height, 100vh) * 0.92);
+    display: flex;
+    align-items: center;
     position: relative;
-    overflow-x: hidden;
+    overflow: hidden;
 }
 
-.about-sheen {
-    display: none;
+.about-section .container,
+.about-section .about {
+    position: relative;
+}
+
+.about-section .about {
+    overflow-x: clip;
+}
+
+.about-section .row {
+    align-items: center;
+    row-gap: 28px;
+}
+
+.about-section .about-title {
+    position: relative;
+    margin-bottom: 18px;
+}
+
+.about-section .about-title::after {
+    content: "";
+    display: block;
+    width: 64px;
+    height: 3px;
+    margin-top: 12px;
+    background: linear-gradient(90deg, var(--maroon-primary), var(--maroon-accent));
+    border-radius: 999px;
+}
+
+.about-sub-title {
+    margin: 0;
+    color: var(--text-muted);
+    line-height: 1.85;
+    font-size: 1.02rem;
 }
 
 .profile-wrap {
     position: relative;
-    width: fit-content;
+    width: min(100%, 386px);
+    aspect-ratio: 1 / 1;
     padding: 18px;
-    background: radial-gradient(circle, rgba(var(--maroon-accent-rgb), 0.18) 0%, transparent 65%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
     margin: 0 auto;
-    overflow: visible;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(var(--maroon-accent-rgb), 0.18) 0%, transparent 68%);
+    isolation: isolate;
 }
 
 .profile-wrap::before,
@@ -29,140 +65,67 @@
 }
 
 .profile-wrap::before {
-    inset: -10px;
-    background:
-        conic-gradient(from 180deg,
-            rgba(var(--maroon-accent-rgb), 0.04),
-            rgba(255, 255, 255, 0.22),
-            rgba(var(--maroon-accent-rgb), 0.34),
-            rgba(255, 255, 255, 0.08),
-            rgba(var(--maroon-accent-rgb), 0.06));
-    filter: blur(10px);
-    opacity: 0.68;
-    animation: aboutBorderOrbit 10s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+    inset: 6px;
+    border: 1px solid rgba(var(--maroon-accent-rgb), 0.22);
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+        0 0 30px rgba(var(--maroon-accent-rgb), 0.12);
+    animation: aboutHaloPulse 4.8s ease-in-out infinite;
 }
 
 .profile-wrap::after {
-    inset: 5px;
-    border: 1px solid rgba(var(--maroon-accent-rgb), 0.18);
-    box-shadow:
-        inset 0 0 0 1px rgba(255, 255, 255, 0.04),
-        0 0 24px rgba(var(--maroon-accent-rgb), 0.16);
-    animation: aboutBorderBreathe 4.8s ease-in-out infinite;
-}
-
-.about-section .container {
-    position: relative;
-}
-
-.about-section .row {
-    align-items: center;
-    gap: 24px;
-}
-
-@media (min-width: 992px) {
-    .about-section .row {
-        flex-wrap: nowrap;
-    }
-}
-
-.about-section .about-title {
-    position: relative;
-}
-
-.about-section .about-title::after {
-    content: '';
-    display: block;
-    width: 64px;
-    height: 3px;
-    margin-top: 12px;
-    background: linear-gradient(90deg, var(--maroon-primary), var(--maroon-accent));
-    border-radius: 999px;
-}
-
-.about-sub-title {
-    background: transparent;
-    border: none;
-    padding: 0;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-}
-
-.hero-section {
-
-    min-height: var(--viewport-stable-height, 100vh);
-    position: relative;
-    overflow: hidden;
-
-}
-
-.about-section {
-    min-height: calc(var(--viewport-stable-height, 100vh) * 0.92);
-    display: flex;
-    align-items: center;
-    position: relative;
-    overflow: hidden;
+    inset: -8px;
+    border: 1px solid rgba(var(--maroon-accent-rgb), 0.12);
+    opacity: 0.55;
+    animation: aboutHaloSpin 14s linear infinite;
 }
 
 .profile-img {
     position: relative;
     z-index: 1;
-    width: 350px;
-    height: 350px;
+    width: 100%;
+    height: 100%;
+    display: block;
     border-radius: 50%;
     object-fit: cover;
     border: 4px solid rgba(var(--maroon-accent-rgb), 0.28);
-    box-shadow: 0 0 30px var(--glow-soft);
-    animation: shadowPulse 1s infinite alternate;
+    box-shadow:
+        0 18px 40px rgba(0, 0, 0, 0.28),
+        0 0 30px rgba(var(--maroon-accent-rgb), 0.16);
+    animation: aboutImageFloat 5.5s ease-in-out infinite;
 }
 
-@keyframes aboutBorderOrbit {
-    0%,
-    100% {
-        transform: rotate(0deg) scale(0.985);
-        opacity: 0.48;
-    }
-
-    25% {
-        transform: rotate(90deg) scale(1.01);
-        opacity: 0.72;
-    }
-
-    50% {
-        transform: rotate(180deg) scale(1.015);
-        opacity: 0.82;
-    }
-
-    75% {
-        transform: rotate(270deg) scale(1);
-        opacity: 0.66;
-    }
-}
-
-@keyframes aboutBorderBreathe {
+@keyframes aboutHaloPulse {
     0%,
     100% {
         transform: scale(0.985);
-        opacity: 0.58;
-        box-shadow:
-            inset 0 0 0 1px rgba(255, 255, 255, 0.04),
-            0 0 16px rgba(var(--maroon-accent-rgb), 0.08);
+        opacity: 0.5;
     }
 
     50% {
-        transform: scale(1.015);
+        transform: scale(1.01);
         opacity: 0.9;
-        box-shadow:
-            inset 0 0 0 1px rgba(255, 255, 255, 0.06),
-            0 0 28px rgba(var(--maroon-accent-rgb), 0.18);
+    }
+}
+
+@keyframes aboutHaloSpin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes aboutImageFloat {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
     }
 }
 
@@ -172,29 +135,32 @@ h6 {
     }
 }
 
+@media (max-width: 991px) {
+    .about-section {
+        min-height: auto;
+    }
+}
+
 @media (max-width: 576px) {
     .about-title {
-        font-size: 2.8rem;
-        padding: 0 15px;
-        padding-bottom: 10px;
+        font-size: 2.35rem;
+        padding: 0 10px 8px;
     }
 
     .about-sub-title {
-        font-size: 1.0rem;
-        padding: 0 18px;
+        font-size: 0.96rem;
+        padding: 0 12px;
         text-align: justify;
+        line-height: 1.75;
     }
 
     .profile-wrap {
-        margin-top: -20px;
-    }
-
-    .profile-img {
-        width: 300px;
-        height: 300px;
+        width: min(100%, 320px);
+        padding: 14px;
+        margin-top: -4px;
     }
 
     .about-section .about-title::after {
-        width: 100%;
+        width: min(100%, 120px);
     }
 }

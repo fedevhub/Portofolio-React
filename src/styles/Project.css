@@ -667,6 +667,7 @@
     align-items: flex-start;
     overflow-y: auto;
     overflow-x: hidden;
+    overflow: hidden;
     justify-content: center;
     z-index: 1050;
     padding: max(16px, env(safe-area-inset-top, 0px)) 20px max(20px, env(safe-area-inset-bottom, 0px));
@@ -686,7 +687,9 @@
 }
 
 .project-description-wrapper {
-    max-height: 150px;
+    flex: 0 1 auto;
+    max-height: 170px;
+    overflow-y: auto;
 }
 
 .project-detail-modal {
@@ -699,7 +702,6 @@
     border-radius: 28px;
     box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
     position: relative;
-    margin: 40px auto;
 }
 
 .project-detail-modal::before {
@@ -714,9 +716,9 @@
 }
 
 .project-detail-modal {
-    position: relative;
-    z-index: 1;
-    overflow-x: hidden;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding-top: 10px;
 }
 
 .project-preview-container {
@@ -1619,7 +1621,16 @@
    ========================================== */
 .project-modal-backdrop {
     overflow: hidden;
-    padding: 24px;
+    padding: 24px 24px 32px;
+}
+
+.project-modal-backdrop {
+    padding: 40px 20px;
+    align-items: center;
+}
+
+.project-detail-modal {
+    margin-bottom: 16px;
 }
 
 .project-detail-modal {
@@ -1842,6 +1853,7 @@
     .project-accent-line {
         margin-top: -10px;
     }
+
     /* GRID: tetap 2 kolom */
     .project-action-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -2414,6 +2426,7 @@
     }
 }
 
+
 /* ==========================================
    PROJECT UX REFINEMENTS
    ========================================== */
@@ -2721,7 +2734,7 @@ body[data-theme="light"] .project-status-badge.ongoing {
 @media (max-width: 640px) {
     .project-modal-backdrop {
         align-items: flex-end;
-        padding: 12px 12px 0;
+        padding: 12px 12px 18px;
     }
 
     .project-detail-modal {

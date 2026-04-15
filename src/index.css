@@ -164,22 +164,10 @@ body {
   max-width: 100%;
 }
 
-main,
-section {
-  width: 100%;
-  max-width: 100%;
-}
-
 img,
 video,
 canvas,
 svg {
-  max-width: 100%;
-}
-
-.container,
-.container-fluid,
-.row {
   max-width: 100%;
 }
 
@@ -396,17 +384,17 @@ svg {
 }
 
 @media (max-width: 768px) {
-  body [data-aos] {
-    max-width: 100%;
+  html,
+  body,
+  #root,
+  .page-content {
+    width: 100%;
   }
 
+  body [data-aos],
+  body [data-aos].aos-animate,
   body [data-aos]:not(.aos-animate) {
-    transform: translate3d(0, 18px, 0) scale(0.985) !important;
     transform-origin: center center !important;
-  }
-
-  body [data-aos].aos-animate {
-    transform: translate3d(0, 0, 0) scale(1) !important;
   }
 }
 

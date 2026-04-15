@@ -19,7 +19,6 @@ import ProtectedRoute from "./context/ProtectedRoute";
 
 import Login from "./Admin/Login";
 
-const MOBILE_AOS_BREAKPOINT = "(max-width: 768px)";
 const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 
 function addMediaQueryListener(mediaQuery, listener) {
@@ -137,16 +136,15 @@ function AosManager() {
   const location = useLocation();
 
   useEffect(() => {
-    const compactViewport = window.matchMedia(MOBILE_AOS_BREAKPOINT);
     const reducedMotion = window.matchMedia(REDUCED_MOTION_QUERY);
 
     const syncAos = () => {
       AOS.init({
-        duration: compactViewport.matches ? 560 : 700,
+        duration: 520,
         delay: 0,
-        easing: "ease-out-cubic",
+        easing: "ease-out-quart",
         once: true,
-        offset: compactViewport.matches ? 16 : 40,
+        offset: 24,
         disable: reducedMotion.matches,
       });
       AOS.refreshHard();
@@ -154,11 +152,9 @@ function AosManager() {
 
     syncAos();
 
-    const removeCompactListener = addMediaQueryListener(compactViewport, syncAos);
     const removeMotionListener = addMediaQueryListener(reducedMotion, syncAos);
 
     return () => {
-      removeCompactListener();
       removeMotionListener();
     };
   }, []);

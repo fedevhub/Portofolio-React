@@ -32,8 +32,6 @@ const STATUS_META = {
   "on going": { text: "On Going", class: "ongoing" },
 };
 
-const PROJECT_CARD_AOS = ["fade-up-right", "zoom-in-up", "fade-up-left"];
-
 const EMPTY_FORM = {
   nama: "",
   deskripsi: "",
@@ -428,7 +426,8 @@ function ProjectDetailModal({ project, isAdmin, onClose }) {
         <div className="project-modal-content">
 
           {/* Left Side - Info */}
-          <div className="project-info-section" data-aos="fade-right" data-aos-duration="700">
+          <div className="project-info-section" data-aos="fade-up"
+            data-aos-duration="400">
             <button
               type="button"
               className="project-modal-close project-editor-back-btn"
@@ -509,7 +508,7 @@ function ProjectDetailModal({ project, isAdmin, onClose }) {
 
           
 
-          <div className="project-preview-section" data-aos="fade-left" data-aos-duration="700" data-aos-delay="100">
+          <div className="project-preview-section" data-aos="fade-up" data-aos-duration="700" data-aos-delay="100">
             {/* IMAGE */}
             <div className="project-preview-container">
               {project.file ? (
@@ -928,13 +927,15 @@ export default function Project() {
 
       <section id="project" className="portfolio-section">
         <div className="container">
-          <div className="section-title animate-fade-in-up" data-aos="fade-right">
+          <div className="section-title animate-fade-in-up" data-aos="fade-up"
+            data-aos-duration="700"
+            data-aos-easing="ease-out">
             <h2 className="highlight">My Projects</h2>
             <p className="highlight-text mt-3">A collection of projects resulting from my learning and exploration in the world of web development.</p>
           </div>
 
           {isAdmin && (
-            <div className="project-top-actions" data-aos="zoom-in-left" data-aos-delay="100">
+            <div className="project-top-actions" data-aos="fade-up" data-aos-delay="100">
               <Link
                 to="/project/add"
                 className="btn btn-add"
@@ -948,7 +949,9 @@ export default function Project() {
             </div>
           )}
 
-          <div className="card-filter animate-fade-in-up" data-aos="fade-left" data-aos-delay="150">
+          <div className="card-filter animate-fade-in-up" data-aos="fade-up"
+            data-aos-delay="100"
+            data-aos-duration="500">
             {FILTERS.map((filter) => (
               <button
                 key={filter.value}
@@ -981,8 +984,10 @@ export default function Project() {
                 <article
                   key={project.id}
                   className="card project-card"
-                  data-aos={PROJECT_CARD_AOS[index % PROJECT_CARD_AOS.length]}
-                  data-aos-delay={(index % itemsPerPage) * 70}
+                    data-aos="fade-up"
+                    data-aos-delay={index * 60}
+                    data-aos-duration="600"
+                    data-aos-easing="ease-out"
                 >
                   <div className="project-visual-trigger" aria-hidden="true">
                     <div className="img-wrapper">

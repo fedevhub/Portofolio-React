@@ -190,10 +190,12 @@
         gap: 12px !important;
     }
 
+
+
 }
 
 @media (max-width: 576px) {
-
+    
     /* judul utama */
     .hero-title {
         font-size: clamp(1.9rem, 8vw, 2.3rem);
@@ -242,9 +244,21 @@
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 576px) {
     .hero-section {
-        padding-top: calc(env(safe-area-inset-top, 0px) + 90px);
-        padding-bottom: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        min-height: 100vh;
+        /* kunci utama */
+        padding: 80px 20px 40px;
+
+        text-align: center;
+    }
+
+    .hero-content {
+        width: 100%;
+        max-width: 100%;
     }
 }

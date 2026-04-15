@@ -37,7 +37,7 @@ export default function Home() {
                         <div className={`hero-content ${isVisible ? "is-visible" : ""}`}>
                             <h4
                                 className="hero-eyebrow hero-reveal"
-                                data-aos="fade-right"
+                                data-aos="fade-up"
                                 style={{ "--hero-delay": "0.08s" }}
                             >
                                 Hello!, It's Me
@@ -54,7 +54,7 @@ export default function Home() {
 
                             <h3
                                 className="hero-role hero-reveal"
-                                data-aos="fade-left"
+                                data-aos="fade-up"
                                 data-aos-delay="180"
                                 style={{ "--hero-delay": "0.28s" }}
                             >
