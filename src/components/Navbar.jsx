@@ -13,7 +13,7 @@ import { getNavbarOffset, scrollToSectionId } from "../utils/sectionScroll";
 const NAV_ITEMS = [
     { id: "home", label: "Home" },
     { id: "about", label: "About" },
-    { id: "skills", label: "Skills" },
+    { id: "tools", label: "Tools" },
     { id: "project", label: "Project" },
     { id: "contact", label: "Contact" },
 ];

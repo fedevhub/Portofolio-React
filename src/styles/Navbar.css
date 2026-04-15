@@ -173,7 +173,6 @@ body[data-theme="light"] {
 .site-nav .navbar-nav a.nav-link:hover,
 .site-nav .navbar-nav a.nav-link:focus-visible {
     color: var(--maroon-accent);
-    background: rgba(var(--maroon-accent-rgb), 0.08);
     transform: translateY(-1px);
 }
 
