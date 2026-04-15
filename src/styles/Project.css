@@ -675,6 +675,7 @@
     transition: opacity 0.3s ease;
 }
 
+
 .project-action-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -1625,8 +1626,7 @@
 }
 
 .project-modal-backdrop {
-    padding: 40px 20px;
-    align-items: center;
+    padding: 0 20px max(20px, env(safe-area-inset-bottom, 0px));
 }
 
 .project-detail-modal {
@@ -2733,8 +2733,8 @@ body[data-theme="light"] .project-status-badge.ongoing {
 
 @media (max-width: 640px) {
     .project-modal-backdrop {
+        padding: 0 !important;
         align-items: flex-end;
-        padding: 12px 12px 18px;
     }
 
     .project-detail-modal {
