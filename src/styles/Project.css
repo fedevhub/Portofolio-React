@@ -30,7 +30,6 @@
     text-align: center;
 }
 
-/* Tablet (max-width: 768px) */
 @media (max-width: 768px) {
     .portfolio-section .section-title h2.highlight {
         font-size: 2.2rem;
@@ -46,7 +45,6 @@
     }
 }
 
-/* Mobile kecil (max-width: 480px) */
 @media (max-width: 480px) {
     .portfolio-section .section-title h2.highlight {
         font-size: 1.8rem;
@@ -63,20 +61,12 @@
     }
 }
 
-/* ==========================================
-   TOP ACTIONS (Admin Add Button)
-   ========================================== */
 .project-top-actions {
     display: flex;
     justify-content: flex-end;
     margin-bottom: 24px;
 }
 
-/* ==========================================
-   PROJECT CARD - FIX & ENHANCEMENT
-   ========================================== */
-
-/* Background card lebih menonjol */
 .project-card {
     height: 100%;
     display: flex;
@@ -84,7 +74,6 @@
     position: relative;
     overflow: hidden;
     background: rgba(139, 41, 66, 0.2);
-    /* Lebih terang dan menonjol */
     border: 1px solid rgba(139, 41, 66, 0.35);
     box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
     border-radius: var(--radius-lg);
@@ -96,7 +85,6 @@
     box-shadow: 0 20px 35px rgba(139, 41, 66, 0.25);
     border-color: rgba(139, 41, 66, 0.6);
     background: rgba(139, 41, 66, 0.28);
-    /* Hover makin terang */
 }
 
 .img-wrapper {
@@ -189,14 +177,12 @@
     border-top: 1px solid rgba(139, 41, 66, 0.2);
 }
 
-/* Container button link actions */
 .project-card .project-link-actions {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
 }
 
-/* Preview - Soft Maroon */
 .project-card .btn-preview {
     background: linear-gradient(135deg, #E11D48, #9F1239);
     border: none;
@@ -227,7 +213,6 @@
     transform: translateY(-2px);
 }
 
-/* Layout dual-link (Preview + Detail) */
 .project-card .project-link-actions.dual-link .btn {
     flex: 1 1 calc(50% - 6px);
     min-width: 0;
@@ -235,15 +220,11 @@
     gap: 8px;
 }
 
-/* Icon di dalam button */
 .project-card .btn-preview i,
 .project-card .btn-detail i {
     font-size: 0.95rem;
 }
 
-/* ==========================================
-   MOBILE: TETAP 2 BUTTON DALAM 1 BARIS
-   ========================================== */
 @media (max-width: 768px) {
     .project-card .project-link-actions.dual-link {
         display: flex;
@@ -283,9 +264,6 @@
     }
 }
 
-/* ==========================================
-   PROJECT EMPTY STATE
-   ========================================== */
 .project-empty {
     text-align: center;
     padding: 60px 20px;
@@ -293,9 +271,6 @@
     font-size: 1.1rem;
 }
 
-/* ==========================================
-   PROJECT FORM
-   ========================================== */
 .project-form {
     max-width: 1200px;
     margin: 0 auto;
@@ -307,9 +282,6 @@
     margin-top: 15px;
 }
 
-/* ==========================================
-   PROJECT FORM - GRID RAPI
-   ========================================== */
 .project-form-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -319,10 +291,6 @@
 .project-field-full {
     grid-column: span 2;
 }
-
-/* ==========================================
-   PERBAIKAN THUMBNAIL (FILE INPUT & PREVIEW)
-   ========================================== */
 
 .project-field:has(input[type="file"]) {
     gap: 12px;
@@ -387,10 +355,6 @@
     display: block;
     object-fit: cover;
 }
-
-/* ==========================================
-   PERBAIKAN CHECKBOX (CUSTOM & SEJAJAR)
-   ========================================== */
 
 .custom-checkbox-wrapper {
     display: inline-flex;
@@ -489,9 +453,6 @@
     margin: 0;
 }
 
-/* ==========================================
-   PERBAIKAN DROPDOWN SELECT
-   ========================================== */
 .project-field select {
     appearance: none;
     background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C9485B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
@@ -655,9 +616,6 @@
     display: none;
 }
 
-/* ==========================================
-   REDESIGNED PROJECT DETAIL MODAL
-   ========================================== */
 .project-modal-backdrop {
     position: fixed;
     inset: 0;
@@ -925,38 +883,28 @@
     letter-spacing: 0.5px;
     margin-bottom: 6px;
     color: rgba(255, 255, 255, 0.85);
-    /* base lebih terang */
     background: transparent !important;
     padding: 0 !important;
     border: none !important;
     display: inline-block;
 }
 
-/* COMPLETED → hijau terang */
 .project-status-text.done {
     color: #4ade80;
-    /* bright green */
 }
 
-/* IN REPAIR → merah terang */
 .project-status-text.repair {
     color: #f87171;
-    /* soft bright red */
 }
 
-/* ON PROGRESS → biru terang */
 .project-status-text.progress {
     color: #60a5fa;
-    /* bright blue */
 }
 
-/* ON GOING → kuning/orange terang */
 .project-status-text.ongoing {
     color: #facc15;
-    /* bright yellow */
 }
 
-/* DOT */
 .project-status-text::before {
     content: "●";
     margin-right: 6px;
@@ -1269,9 +1217,6 @@
     }
 }
 
-/* =========================================================
-   BASE BUTTON SYSTEM (SOURCE OF TRUTH)
-========================================================= */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -1384,9 +1329,6 @@
     background: #8B2942;
 }
 
-/* ==========================================
-   FILTER BUTTON - WARNA CORAL
-   ========================================== */
 .filter-btn {
     background-color: transparent;
     border: 2px solid #FF6B6B;
@@ -1447,9 +1389,6 @@
     }
 }
 
-/* ==========================================
-   PROJECT CARD BUTTON REDESIGN OVERRIDE
-   ========================================== */
 .project-card .card-body {
     height: 100%;
 }
@@ -1556,7 +1495,6 @@
     background: #24292e;
 }
 
-/* Edit - Electric Blue Outline */
 .project-card .btn-edit {
     background: rgba(52, 152, 219, 0.1);
     border: 1.5px solid #3498DB;
@@ -1573,7 +1511,6 @@
     box-shadow: 0 6px 14px rgba(52, 152, 219, 0.4);
 }
 
-/* Delete - Orange Outline */
 .project-card .btn-delete {
     background: rgba(243, 156, 18, 0.1);
     border: 1.5px solid #F39C12;
@@ -1608,9 +1545,6 @@
     font-size: 1rem;
 }
 
-/* ==========================================
-   PROJECT MODAL REFINEMENTS
-   ========================================== */
 .project-modal-backdrop {
     overflow: hidden;
     padding: 24px 24px 32px;
@@ -1840,20 +1774,17 @@
         margin-top: -10px;
     }
 
-    /* GRID: tetap 2 kolom */
     .project-action-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 10px;
     }
 
-    /* INLINE ADMIN: jadi 2 kolom juga */
     .project-action-inline {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 10px;
     }
 
-    /* Semua button full dalam cell */
     .project-action-grid .btn,
     .project-action-inline .btn {
         width: 100%;
@@ -1861,34 +1792,6 @@
     }
 }
 
-/* @media (max-width: 640px) {
-    .project-action-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .project-action-inline {
-        gap: 10px;
-    }
-
-    .project-action-inline .btn {
-        width: 100%;
-        flex: 1 1 100%;
-    }
-
-    .project-action-inline.close-only .project-close-corner {
-        width: auto;
-        flex: 0 0 auto;
-    }
-
-    .project-editor-actions {
-        flex-direction: column;
-        align-items: stretch;
-    }
-} */
-
-/* ==========================================
-   PAGINATION
-   ========================================== */
 .portfolio-pagination {
     display: flex;
     justify-content: center;
@@ -1944,9 +1847,6 @@
     pointer-events: none;
 }
 
-/* ==========================================
-   RESPONSIVE ADJUSTMENTS
-   ========================================== */
 @media (max-width: 768px) {
     .project-form-grid {
         grid-template-columns: 1fr;
@@ -2043,9 +1943,6 @@
     }
 }
 
-/* ==========================================
-   HELPER / UTILITY
-   ========================================== */
 .hidden {
     opacity: 0;
     visibility: hidden;
@@ -2095,9 +1992,6 @@
     transform: scale(1.02);
 }
 
-/* ==========================================
-   DELETE CONFIRM MODAL - CLASS BERBEDA
-   ========================================== */
 .delete-modal-backdrop {
     position: fixed;
     inset: 0;
@@ -2250,9 +2144,6 @@
     padding: 10px;
 }
 
-/* ==========================================
-   FINAL PROJECT UI OVERRIDES
-   ========================================== */
 .img-wrapper {
     position: relative;
 }
@@ -2412,10 +2303,6 @@
     }
 }
 
-
-/* ==========================================
-   PROJECT UX REFINEMENTS
-   ========================================== */
 .project-modal-close {
     display: none;
 }
@@ -2731,7 +2618,6 @@ body[data-theme="light"] .project-status-badge.ongoing {
     .project-modal-backdrop {
         padding: 0;
         align-items: stretch;
-        /* ✅ full height */
     }
 
     .project-detail-modal {

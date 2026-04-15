@@ -195,28 +195,24 @@
 }
 
 @media (max-width: 576px) {
-    
-    /* judul utama */
+
     .hero-title {
         font-size: clamp(1.9rem, 8vw, 2.3rem);
         line-height: 1.2;
         margin-bottom: 10px;
     }
 
-    /* subjudul (role) */
     .hero-role {
         font-size: 0.9rem;
         margin-bottom: 14px;
     }
 
-    /* teks deskripsi */
     .hero-text {
         font-size: 0.85rem;
         line-height: 1.5;
         margin-bottom: 22px;
     }
 
-    /* teks kecil atas (Hello, It's Me) */
     .hero-eyebrow {
         font-size: 0.7rem;
         letter-spacing: 0.14em;
@@ -249,11 +245,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-
         min-height: 100vh;
-        /* kunci utama */
         padding: 80px 20px 40px;
-
         text-align: center;
     }
 

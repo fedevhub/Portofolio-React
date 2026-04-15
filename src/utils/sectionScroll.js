@@ -48,7 +48,6 @@ export function scrollToSectionId(
   function run() {
     alignScroll(behavior);
 
-    // Re-align after layout settles so returning to a section lands exactly.
     window.setTimeout(() => alignScroll("auto"), 180);
     window.setTimeout(() => alignScroll("auto"), 420);
   }

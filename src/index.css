@@ -210,7 +210,6 @@ svg {
   animation: auroraShift 18s ease-in-out infinite;
 }
 
-/* Floating Elements */
 .floating-elements {
   position: absolute;
   top: 0;
@@ -253,7 +252,6 @@ svg {
   background: radial-gradient(circle, var(--float-3) 0%, transparent 70%);
 }
 
-/* Subtle Grid */
 .grid {
   position: absolute;
   top: 0;
@@ -268,7 +266,6 @@ svg {
   mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
 }
 
-/* Particle System */
 .particles {
   position: absolute;
   top: 0;
@@ -284,7 +281,6 @@ svg {
   animation: particleFloat 15s infinite linear;
 }
 
-/* Wave Lines */
 .waves {
   position: absolute;
   bottom: 0;

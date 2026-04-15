@@ -809,7 +809,6 @@ export default function Project() {
   useEffect(() => {
     const hashTarget = location.hash.replace("#", "");
 
-    // 🔥 kalau ada hash → JANGAN SENTUH sessionStorage
     if (isKnownSectionId(hashTarget)) {
       const timer = setTimeout(() => {
         scrollToSectionId(hashTarget, { behavior: "smooth" });
@@ -818,7 +817,6 @@ export default function Project() {
       return () => clearTimeout(timer);
     }
 
-    // baru fallback ke memory
     const rememberedTarget = consumeSectionTarget();
 
     if (rememberedTarget) {

@@ -1,5 +1,3 @@
-/* ========== FOOTER - RESPONSIVE (Mobile: 2-2-1 layout, Github di kiri) ========== */
-
 .site-footer {
     position: relative;
     padding: 70px 0 28px;
@@ -102,7 +100,6 @@
     color: var(--footer-text);
 }
 
-/* Modern Portfolio Refresh */
 section {
     padding: 110px 0;
     position: relative;
@@ -115,28 +112,23 @@ section {
     padding: 0;
 }
 
-/* ========== MOBILE LAYOUT - 2-2-1 (Github di kiri, tidak full width) ========== */
 @media (max-width: 768px) {
 
-    /* Stack LETS COLLABORATE dan FIND ME ONLINE vertikal */
     .footer-grid {
         grid-template-columns: 1fr;
         gap: 40px;
     }
 
-    /* 2 kolom untuk semua button */
     .footer-social-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 12px;
     }
 
-    /* Hapus grid-column span, biar Github tetap di kiri (posisi 1 kolom) */
     .social-item:last-child {
         grid-column: auto;
     }
 
-    /* Spacing rapi */
     .footer-bottom {
         margin-top: 40px;
         padding-bottom: 20px;
@@ -147,7 +139,6 @@ section {
     }
 }
 
-/* Extra small devices (<= 480px) */
 @media (max-width: 480px) {
     .footer-bottom {
         padding-bottom: 0px;

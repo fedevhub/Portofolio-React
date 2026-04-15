@@ -23,7 +23,6 @@
     text-align: center;
 }
 
-/* GRID */
 .skills-grid {
     display: grid;
     margin-top: 25px;
@@ -35,7 +34,6 @@
     display: contents;
 }
 
-/* CARD - Lebih terang */
 .skill-card {
     display: flex;
     flex-direction: column;
@@ -44,7 +42,6 @@
     padding: 24px;
     border-radius: 14px;
     background: rgba(155, 35, 53, 0.3);
-    /* lebih cerah & lebih terang */
     border: 1px solid rgba(155, 35, 53, 0.55);
     backdrop-filter: blur(10px);
     text-align: center;
@@ -92,7 +89,6 @@
     margin-top: 10px;
 }
 
-/* FORM */
 .skills-form {
     display: flex;
     gap: 12px;
@@ -116,7 +112,6 @@
     border-color: #9b2335;
 }
 
-/* Grup color picker + text input */
 .color-input-group {
     display: flex;
     gap: 6px;
@@ -146,7 +141,6 @@
     margin: 0;
 }
 
-/* tombol */
 .skills-section .btn {
     padding: 10px 14px;
     border-radius: 10px;
@@ -210,12 +204,10 @@
     color: white;
 }
 
-/* hint (jika ada) */
 .skills-hint {
     display: none;
 }
 
-/* RESPONSIVE */
 @media (max-width: 1200px) {
     .skills-grid {
         grid-template-columns: repeat(5, 1fr);
@@ -260,13 +252,10 @@
     padding: 10px 20px;
     border-radius: 999px;
     border: none;
-
     background: linear-gradient(135deg, #b11226, #e11d48);
-    /* crimson → rose red */
     color: #fff;
     font-weight: 600;
     letter-spacing: 0.4px;
-
     box-shadow: 0 10px 25px rgba(225, 29, 72, 0.25);
     transition: all 0.3s ease;
 }
@@ -367,9 +356,6 @@
     flex: 1;
 }
 
-/* ==========================================
-   SKILLS SIZE TUNE
-   ========================================== */
 .skills-section .btn {
     min-height: 40px;
     padding: 8px 14px;
