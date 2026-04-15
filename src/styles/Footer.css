@@ -94,7 +94,7 @@
     color: var(--text-muted);
     padding-top: 25px;
     border-top: 1px solid rgba(var(--maroon-accent-rgb), 0.2);
-    margin-bottom: -25px;
+    margin-bottom: -15px;
 }
 
 .footer {
