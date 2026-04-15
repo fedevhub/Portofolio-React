@@ -1,5 +1,6 @@
 .skills-section {
     background: transparent;
+    overflow-x: hidden;
 }
 
 .skills-title {

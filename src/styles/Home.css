@@ -1,6 +1,7 @@
 .hero-section {
     padding-top: 140px;
     padding-bottom: 140px;
+    overflow-x: hidden;
 }
 
 .hero-content {
@@ -173,16 +174,20 @@
     }
 
     .hero-actions .btn {
-        width: aut0;
+        width: 100%;
+        max-width: 280px;
         justify-content: center;
         padding: 14px 24px;
         font-size: 0.75rem;
-        white-space: nowrap;
+        white-space: normal;
+        text-align: center;
     }
 
     .hero-actions {
-        flex-wrap: nowrap;
+        width: 100%;
+        flex-wrap: wrap;
         justify-content: center;
+        gap: 12px !important;
     }
 
 }

@@ -129,6 +129,9 @@ body[data-theme="light"] {
 
 html {
   min-height: 100%;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -142,6 +145,8 @@ body {
   min-height: var(--viewport-stable-height);
   display: flex;
   flex-direction: column;
+  width: 100%;
+  max-width: 100%;
 }
 
 #root {
@@ -149,10 +154,42 @@ body {
   display: flex;
   flex: 1 0 auto;
   flex-direction: column;
+  width: 100%;
+  max-width: 100%;
 }
 
 .page-content {
   flex: 1 0 auto;
+  width: 100%;
+  max-width: 100%;
+}
+
+main,
+section {
+  width: 100%;
+  max-width: 100%;
+}
+
+img,
+video,
+canvas,
+svg {
+  max-width: 100%;
+}
+
+.container,
+.container-fluid,
+.row {
+  max-width: 100%;
+}
+
+@supports (overflow: clip) {
+  html,
+  body,
+  #root,
+  .page-content {
+    overflow-x: clip;
+  }
 }
 
 .background {
@@ -358,3 +395,31 @@ body {
   }
 }
 
+@media (max-width: 768px) {
+  body [data-aos] {
+    max-width: 100%;
+  }
+
+  body [data-aos]:not(.aos-animate) {
+    transform: translate3d(0, 18px, 0) scale(0.985) !important;
+    transform-origin: center center !important;
+  }
+
+  body [data-aos].aos-animate {
+    transform: translate3d(0, 0, 0) scale(1) !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  body [data-aos],
+  body [data-aos].aos-animate,
+  body [data-aos]:not(.aos-animate) {
+    transition-duration: 0ms !important;
+    transition-delay: 0ms !important;
+    transform: none !important;
+  }
+}

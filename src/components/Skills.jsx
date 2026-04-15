@@ -159,7 +159,7 @@ export default function Skills() {
   }
 
   return (
-    <section id="skills" className="skills-section">
+    <section id="tools" className="skills-section">
       <div className="container">
         <div className="section-heading" data-aos="fade-right">
           <h1 className="skills-title">Tools & Technologies</h1>
