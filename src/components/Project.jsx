@@ -826,14 +826,6 @@ export default function Project() {
 
       return () => clearTimeout(timer);
     }
-
-    if (!targetId) return;
-
-    const timer = setTimeout(() => {
-      scrollToSectionId(targetId, { behavior: "smooth" });
-    }, 120);
-
-    return () => clearTimeout(timer);
   }, [location.hash, location.pathname]);
   
   const isAdmin =
