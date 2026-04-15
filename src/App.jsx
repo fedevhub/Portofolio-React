@@ -89,7 +89,15 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
 
-          <Route path="/admin" element={<Login />} />
+          <Route
+            path="/admin"
+            element={
+              <>
+                <BackgroundLayer />
+                <Login />
+              </>
+            }
+          />
 
           <Route
             path="/admin/dashboard"

@@ -227,6 +227,7 @@ body[data-theme="light"] .site-nav .navbar-toggler-icon {
     align-items: center;
     justify-content: center;
     transition: all 0.2s ease;
+    height: 40px;
 }
 
 .logout-btn:hover {

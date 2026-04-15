@@ -160,6 +160,7 @@
     background: linear-gradient(135deg, #dc2626, #f43f5e) !important;
     border: none !important;
     color: #fff !important;
+    height: 44.5px;
 }
 
 .skills-section .btn.btn-add:hover, .skills-section .btn.btn-update:hover {
@@ -174,10 +175,10 @@
     font-weight: bold;
 }
 
-.skills-section .btn-cancel,
+.skills-section .btn.btn-cancel,
 .skills-section .btn-add,
 .skills-section .btn-update {
-    height: 44px;
+    height: 44.5px;
     background: #5a6270;
     color: white;
 }

@@ -6,8 +6,8 @@ export default function Footer() {
             <footer className="footer text-white site-footer">
                 <div className="container footer-grid">
                     <div className="footer-info" data-aos="fade-right">
-                        <h3 className="footer-title">Lets Collaborate</h3>
-                        <p className="footer-subtitle">Terbuka untuk kolaborasi, magang, atau proyek freelance.</p>
+                        <h3 className="footer-title">Let’s Work Together</h3>
+                        <p className="footer-subtitle">Open for projects & collaborations</p>
                         <ul className="footer-list">
                             <li>
                                 <i className="bi bi-geo-alt-fill"></i>
@@ -32,7 +32,7 @@ export default function Footer() {
                                 <i className="bi bi-instagram"></i>
                                 <span>Instagram</span>
                             </a>
-                            <a href="https://wa.me/6282338503696?text=Ada%20yang%20bisa%20saya%20bantu%3F"
+                            <a href="https://wa.me/6282330717123?text=Halo,%20saya%20tertarik%20dengan%20portfolio%20anda%20dan%20ingin%20berdiskusi%20lebih%20lanjut"
                                 target="_blank" className="social-item">
                                 <i className="bi bi-whatsapp"></i>
                                 <span>WhatsApp</span>

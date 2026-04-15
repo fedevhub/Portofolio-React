@@ -775,6 +775,7 @@
     color: #ffffff;
     line-height: 1.2;
     margin: 0;
+    margin-top: -10px;
 }
 
 .project-title-area .project-subtitle {
@@ -924,8 +925,8 @@
 }
 
 .project-status-text {
-    font-size: 0.85rem;
-    font-weight: 500;
+    font-size: 0.95rem;
+    font-weight: 600;
     letter-spacing: 0.5px;
     margin-bottom: 6px;
     color: rgba(255, 255, 255, 0.85);
@@ -964,6 +965,7 @@
 .project-status-text::before {
     content: "●";
     margin-right: 6px;
+    font-size: 1.5rem;
 }
 
 .project-action-inline {
@@ -1266,6 +1268,10 @@
     .project-action-buttons .btn {
         width: 100%;
     }
+
+    .project-action-grid {
+        flex-direction: column;
+    }
 }
 
 /* =========================================================
@@ -1430,7 +1436,7 @@
         display: flex;
         justify-content: end;
     }
-    
+
 }
 
 @media (max-width: 480px) {
@@ -1639,7 +1645,8 @@
 }
 
 .project-action-grid {
-    margin-top: 14px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .project-action-grid .btn,
@@ -1801,6 +1808,54 @@
 }
 
 @media (max-width: 640px) {
+    .project-stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px;
+    }
+
+    .project-stat-card {
+        padding: 14px 12px;
+    }
+
+    .project-stat-value {
+        font-size: 1.2rem;
+    }
+
+    .project-stat-label {
+        font-size: 0.7rem;
+    }
+
+    .project-stat-icon {
+        width: 34px;
+        height: 34px;
+        font-size: 0.9rem;
+    }
+
+    .project-accent-line {
+        margin-top: -10px;
+    }
+    /* GRID: tetap 2 kolom */
+    .project-action-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    /* INLINE ADMIN: jadi 2 kolom juga */
+    .project-action-inline {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    /* Semua button full dalam cell */
+    .project-action-grid .btn,
+    .project-action-inline .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* @media (max-width: 640px) {
     .project-action-grid {
         grid-template-columns: 1fr;
     }
@@ -1823,7 +1878,7 @@
         flex-direction: column;
         align-items: stretch;
     }
-}
+} */
 
 /* ==========================================
    PAGINATION

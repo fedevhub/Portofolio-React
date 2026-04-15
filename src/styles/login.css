@@ -249,11 +249,12 @@
 @media (max-width: 480px) {
     .login-card {
         padding: 30px 24px;
-        margin: 0 20px;
+        margin: 0;
         max-width: calc(100% - 40px);
     }
 
     .login-header h3 {
         font-size: 1.6rem;
     }
+    
 }
