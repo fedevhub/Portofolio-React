@@ -149,6 +149,12 @@ body {
   max-width: 100%;
 }
 
+body.modal-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+
 #root {
   min-height: inherit;
   display: flex;

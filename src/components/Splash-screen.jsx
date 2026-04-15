@@ -13,7 +13,6 @@ export default function SplashScreen() {
         "Clean & Modern Web Experience"
     ]);
 
-    // typing effect
     useEffect(() => {
         let i = 0;
         let char = 0;
@@ -62,7 +61,6 @@ export default function SplashScreen() {
         };
     }, [texts]);
 
-    // auto hide splash
     useEffect(() => {
         const previousBodyOverflow = document.body.style.overflow;
         const previousHtmlOverflow = document.documentElement.style.overflow;
@@ -102,29 +100,24 @@ export default function SplashScreen() {
 
     return (
         <div className={`splash ${isLeaving ? "is-leaving" : ""}`}>
-            {/* glow background */}
             <div className="glow-bg"></div>
 
-            {/* particles */}
             <div className="particles">
                 {Array.from({ length: 12 }).map((_, i) => (
                     <span key={i}></span>
                 ))}
             </div>
 
-            {/* content */}
             <div className="content">
                 <h1 className="title">Fitri Portfolio</h1>
                 <p className="subtitle">Student Developer</p>
 
-                {/* spinner loader */}
                 <div className="spinner">
                     <div className="ring"></div>
                     <div className="ring"></div>
                     <div className="ring"></div>
                 </div>
 
-                {/* typing text */}
                 <p className="typing">{text}</p>
             </div>
         </div>

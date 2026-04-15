@@ -6,6 +6,10 @@
     overflow: hidden;
 }
 
+.about-title {
+    font-weight: bold;
+}
+
 .about-section .container,
 .about-section .about {
     position: relative;
@@ -44,67 +48,134 @@
 
 .profile-wrap {
     position: relative;
-    width: min(100%, 386px);
+    width: min(100%, 350px);
+    /* sebelumnya 386px */
     aspect-ratio: 1 / 1;
-    padding: 18px;
     margin: 0 auto;
     display: grid;
     place-items: center;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(var(--maroon-accent-rgb), 0.18) 0%, transparent 68%);
     isolation: isolate;
 }
 
-.profile-wrap::before,
+.profile-wrap::before {
+    content: "";
+    position: absolute;
+    inset: -10px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 90, 100, 0.35), transparent 70%);
+    filter: blur(16px);
+    z-index: 0;
+
+    /* ANIMASI HALUS TERUS NYALA */
+    animation: glowIdle 3.5s ease-in-out infinite;
+}
+
+.profile-wrap:hover::before {
+    transform: scale(1.1);
+    background: radial-gradient(circle, rgba(255, 110, 120, 0.6), transparent 70%);
+}
+
 .profile-wrap::after {
     content: "";
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    pointer-events: none;
+    border: 1.5px solid rgba(255, 90, 100, 0.35);
+    z-index: 0;
+
+    animation: ringPulse 4s ease-in-out infinite;
 }
 
-.profile-wrap::before {
-    inset: 6px;
-    border: 1px solid rgba(var(--maroon-accent-rgb), 0.22);
-    box-shadow:
-        inset 0 0 0 1px rgba(255, 255, 255, 0.04),
-        0 0 30px rgba(var(--maroon-accent-rgb), 0.12);
-    animation: aboutHaloPulse 4.8s ease-in-out infinite;
-}
-
-.profile-wrap::after {
-    inset: -8px;
-    border: 1px solid rgba(var(--maroon-accent-rgb), 0.12);
-    opacity: 0.55;
-    animation: aboutHaloSpin 14s linear infinite;
+.profile-wrap:hover::after {
+    border-color: rgba(255, 120, 130, 0.8);
 }
 
 .profile-img {
     position: relative;
     z-index: 1;
-    width: 100%;
-    height: 100%;
-    display: block;
+    width: 92%;
+    height: 92%;
     border-radius: 50%;
     object-fit: cover;
-    border: 4px solid rgba(var(--maroon-accent-rgb), 0.28);
+
+    border: 3px solid rgba(255, 90, 100, 0.5);
+
     box-shadow:
-        0 18px 40px rgba(0, 0, 0, 0.28),
-        0 0 30px rgba(var(--maroon-accent-rgb), 0.16);
-    animation: aboutImageFloat 5.5s ease-in-out infinite;
+        0 10px 25px rgba(0, 0, 0, 0.35),
+        0 0 14px rgba(255, 90, 100, 0.25);
+
+    transition: all 0.4s ease;
 }
 
-@keyframes aboutHaloPulse {
+.profile-wrap:hover .profile-img {
+    transform: scale(1.04);
+    box-shadow:
+        0 14px 35px rgba(0, 0, 0, 0.45),
+        0 0 28px rgba(255, 100, 110, 0.7);
+}
+
+@keyframes glowIdle {
+
     0%,
     100% {
-        transform: scale(0.985);
+        transform: scale(0.98);
+        opacity: 0.6;
+    }
+
+    50% {
+        transform: scale(1.04);
+        opacity: 0.9;
+    }
+}
+
+@keyframes ringPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
         opacity: 0.5;
     }
 
     50% {
-        transform: scale(1.01);
+        transform: scale(1.03);
         opacity: 0.9;
+    }
+}
+
+@keyframes softGlowPulse {
+
+    0%,
+    100% {
+        transform: scale(0.98);
+        opacity: 0.5;
+    }
+
+    50% {
+        transform: scale(1.03);
+        opacity: 0.8;
+    }
+}
+
+@keyframes subtleSpin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes floatSmooth {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-6px);
     }
 }
 
@@ -119,6 +190,7 @@
 }
 
 @keyframes aboutImageFloat {
+
     0%,
     100% {
         transform: translateY(0);
@@ -161,6 +233,10 @@
     }
 
     .about-section .about-title::after {
-        width: min(100%, 120px);
+        content: "";
+        display: block;
+        width: 210px;
+        height: 3px;
+        margin: 8px auto 0;
     }
 }

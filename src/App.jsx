@@ -62,6 +62,32 @@ function SiteLayout({ children }) {
 }
 
 function LandingPage() {
+  useActiveSectionHash();
+  
+  function useActiveSectionHash() {
+    useEffect(() => {
+      const sections = document.querySelectorAll("section[id]");
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const id = entry.target.id;
+              window.history.replaceState(null, "", `#${id}`);
+            }
+          });
+        },
+        {
+          rootMargin: "-40% 0px -50% 0px",
+        }
+      );
+
+      sections.forEach((section) => observer.observe(section));
+
+      return () => observer.disconnect();
+    }, []);
+  }
+
   return (
     <SiteLayout>
       <Home />

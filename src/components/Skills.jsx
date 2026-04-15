@@ -12,9 +12,6 @@ const INITIAL_FORM = {
   color: "#ffffff",
 };
 
-
-const SKILL_CARD_AOS = ["fade-up"];
-
 function sortSkillsOldestFirst(items) {
   return [...items].sort((a, b) => {
     const createdIdA = Number(a.created_id);
@@ -64,7 +61,6 @@ export default function Skills() {
     });
   }, []);
 
-  // responsive handler
   useEffect(() => {
     const handleResize = () => {
       const mobile = window.innerWidth <= 768;
@@ -86,7 +82,6 @@ export default function Skills() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // load data
   useEffect(() => {
     let active = true;
 
@@ -105,7 +100,6 @@ export default function Skills() {
     return () => (active = false);
   }, []);
 
-  // refresh AOS
   useEffect(() => {
     AOS.refreshHard();
   }, [skills, deleteTarget, editId, visibleCount]);
@@ -167,8 +161,6 @@ export default function Skills() {
   return (
     <section id="tools" className="skills-section">
       <div className="container">
-
-        {/* 🔥 HEADING (smooth hierarchy) */}
         <div
           className="section-heading"
           data-aos="fade-up"
@@ -192,7 +184,6 @@ export default function Skills() {
           </p>
         </div>
 
-        {/* 🔥 FORM ADMIN */}
         {isAdmin && (
           <div
             className="skills-form"
@@ -254,7 +245,6 @@ export default function Skills() {
           </div>
         )}
 
-        {/* 🔥 SKILL GRID */}
         <div className="skills-grid">
           <div className="skills-row">
             {displayedSkills.map((skill, index) => (
@@ -297,7 +287,6 @@ export default function Skills() {
           </div>
         </div>
 
-        {/* 🔥 SHOW MORE */}
         {visibleCount < skills.length && (
           <div
             className="show-more-wrapper"

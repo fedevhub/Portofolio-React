@@ -206,6 +206,11 @@ function navigateToProjectSection(navigate) {
   navigate("/admin/dashboard#project");
 }
 
+function navigateToProjectSectionPublic(navigate) {
+  rememberSectionTarget("project");
+  navigate("/#project");
+}
+
 function ProjectForm({ formData, onChange, onSubmit, saving, submitLabel, submitHint, existingImageUrl, onBack }) {
   const [imagePreview, setImagePreview] = useState(existingImageUrl || null);
 
@@ -221,7 +226,6 @@ function ProjectForm({ formData, onChange, onSubmit, saving, submitLabel, submit
     }
   };
 
-  // Cleanup preview URL saat komponen unmount (jika perlu)
   useEffect(() => {
     return () => {
       if (imagePreview && imagePreview.startsWith("blob:")) {
@@ -259,7 +263,6 @@ function ProjectForm({ formData, onChange, onSubmit, saving, submitLabel, submit
           </select>
         </label>
 
-        {/* Link Preview & Link GitHub */}
         <label className="project-field">
           <span>Link Preview (demo)</span>
           <input
@@ -280,7 +283,6 @@ function ProjectForm({ formData, onChange, onSubmit, saving, submitLabel, submit
           />
         </label>
 
-        {/* Deskripsi - full width */}
         <label className="project-field project-field-full">
           <span>Deskripsi</span>
           <textarea
@@ -292,7 +294,6 @@ function ProjectForm({ formData, onChange, onSubmit, saving, submitLabel, submit
           />
         </label>
 
-        {/* Fitur & Tools - sebaris */}
         <label className="project-field">
           <span>Fitur</span>
           <textarea
@@ -313,7 +314,6 @@ function ProjectForm({ formData, onChange, onSubmit, saving, submitLabel, submit
           />
         </label>
 
-        {/* Thumbnail & Checkbox - sebaris */}
         <div className="project-field">
           <input
             type="file"
@@ -335,7 +335,6 @@ function ProjectForm({ formData, onChange, onSubmit, saving, submitLabel, submit
           </select>
         </label>
 
-        {/* Preview Gambar - full width di bawah baris thumbnail & checkbox */}
         {imagePreview && (
           <div className="project-field project-field-full thumbnail-preview-container">
             <span>Preview Thumbnail</span>
@@ -365,6 +364,7 @@ function ProjectForm({ formData, onChange, onSubmit, saving, submitLabel, submit
 }
 
 function ProjectDetailModal({ project, isAdmin, onClose }) {
+  const location = useLocation();
   const navigate = useNavigate();
   const [deleteTarget, setDeleteTarget] = useState(null);
   const tools = project ? getProjectTools(project) : [];
@@ -373,23 +373,17 @@ function ProjectDetailModal({ project, isAdmin, onClose }) {
   const hasGithubLink = hasLink(project?.github_url);
 
   useEffect(() => {
-    if (!project) {
-      return undefined;
-    }
+    if (!project) return;
 
-    const previousOverflow = document.body.style.overflow;
-    const previousPaddingRight = document.body.style.paddingRight;
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    const scrollbarWidth =
+      window.innerWidth - document.documentElement.clientWidth;
 
-    document.body.style.overflow = "hidden";
-
-    if (scrollbarWidth > 0) {
-      document.body.style.paddingRight = `${scrollbarWidth}px`;
-    }
+    document.body.classList.add("modal-open");
+    document.body.style.paddingRight = `${scrollbarWidth}px`;
 
     return () => {
-      document.body.style.overflow = previousOverflow;
-      document.body.style.paddingRight = previousPaddingRight;
+      document.body.classList.remove("modal-open");
+      document.body.style.paddingRight = "";
     };
   }, [project]);
 
@@ -418,14 +412,11 @@ function ProjectDetailModal({ project, isAdmin, onClose }) {
     <div className="project-modal-backdrop" onClick={onClose}>
       <div className="project-detail-modal" onClick={(event) => event.stopPropagation()}>
 
-        {/* Close Button */}
         <button type="button" className="project-modal-close" onClick={onClose}>
           ×
         </button>
 
         <div className="project-modal-content">
-
-          {/* Left Side - Info */}
           <div className="project-info-section" data-aos="fade-up"
             data-aos-duration="400">
             <button
@@ -448,10 +439,6 @@ function ProjectDetailModal({ project, isAdmin, onClose }) {
 
             <div className="project-accent-line"></div>
 
-            {/* Key Features */}
-            
-
-            {/* Technologies Used */}
             {tools.length > 0 && (
               <div className="project-tools-section">
                 <p className="tools-label">Technologies Used</p>
@@ -466,7 +453,6 @@ function ProjectDetailModal({ project, isAdmin, onClose }) {
               </div>
             )}
 
-            {/* Stats */}
             <div className="project-stats-grid">
               <div className="project-stat-card">
                 <div className="project-stat-icon">
@@ -509,7 +495,6 @@ function ProjectDetailModal({ project, isAdmin, onClose }) {
           
 
           <div className="project-preview-section" data-aos="fade-up" data-aos-duration="700" data-aos-delay="100">
-            {/* IMAGE */}
             <div className="project-preview-container">
               {project.file ? (
                 <img src={project.file} alt={project.nama} />
@@ -520,7 +505,6 @@ function ProjectDetailModal({ project, isAdmin, onClose }) {
               )}
             </div>
 
-            {/* DESCRIPTION */}
             <div className="project-description-wrapper">
               <p className="project-description">
                 {project.deskripsi}
@@ -609,14 +593,6 @@ function ProjectEditorPage({ mode }) {
   const [currentProject, setCurrentProject] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
 
-  useEffect(() => {
-    const frame = window.requestAnimationFrame(() => {
-      window.scrollTo(0, 0);
-    });
-
-    return () => window.cancelAnimationFrame(frame);
-  }, []);
-
   async function handleDelete(project) {
     const { error } = await supabase
       .from("Project")
@@ -673,9 +649,21 @@ function ProjectEditorPage({ mode }) {
   }, [id, isEditMode]);
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      console.log("USER:", data.user);
-    });
+    function handleScroll(e) {
+      const modal = document.querySelector(".project-detail-modal");
+
+      if (modal && !modal.contains(e.target)) {
+        e.preventDefault();
+      }
+    }
+
+    document.addEventListener("wheel", handleScroll, { passive: false });
+    document.addEventListener("touchmove", handleScroll, { passive: false });
+
+    return () => {
+      document.removeEventListener("wheel", handleScroll);
+      document.removeEventListener("touchmove", handleScroll);
+    };
   }, []);
 
   function updateForm(field, value) {
@@ -820,8 +808,26 @@ export default function Project() {
 
   useEffect(() => {
     const hashTarget = location.hash.replace("#", "");
+
+    // 🔥 kalau ada hash → JANGAN SENTUH sessionStorage
+    if (isKnownSectionId(hashTarget)) {
+      const timer = setTimeout(() => {
+        scrollToSectionId(hashTarget, { behavior: "smooth" });
+      }, 120);
+
+      return () => clearTimeout(timer);
+    }
+
+    // baru fallback ke memory
     const rememberedTarget = consumeSectionTarget();
-    const targetId = isKnownSectionId(hashTarget) ? hashTarget : rememberedTarget;
+
+    if (rememberedTarget) {
+      const timer = setTimeout(() => {
+        scrollToSectionId(rememberedTarget, { behavior: "smooth" });
+      }, 120);
+
+      return () => clearTimeout(timer);
+    }
 
     if (!targetId) return;
 
@@ -912,7 +918,6 @@ export default function Project() {
       return;
     }
 
-    // update state langsung tanpa reload
     setProjects((prev) => prev.filter((p) => p.id !== project.id));
     setDeleteTarget(null);
   }
@@ -1015,15 +1020,6 @@ export default function Project() {
                     </h5>
                     <p className="card-text">{project.deskripsi}</p>
 
-                    {/* <div className="card-tags">
-                      {getProjectTools(project).map((tool, index) => (
-                        <span key={`${project.id}-${tool}-${index}`} className="card-tag">
-                          {tool}
-                        </span>
-                      ))}
-                    </div> */}
-
-                    {/* ================= PROJECT CARD ================= */}
                     {hasFooterActions && (
                       <div className="project-card-footer">
                         <div className="project-card-actions-stack">
@@ -1119,7 +1115,15 @@ export default function Project() {
       <ProjectDetailModal
         project={selectedProject}
         isAdmin={isAdmin}
-        onClose={() => setSelectedProject(null)}
+        onClose={() => {
+          setSelectedProject(null);
+
+          if (isAdmin) {
+            scrollToSectionId("project", { behavior: "smooth" });
+          } else {
+            scrollToSectionId("project", { behavior: "smooth" });
+          }
+        }}
       />
     </>
   );
