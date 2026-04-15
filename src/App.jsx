@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
@@ -61,6 +61,65 @@ function LandingPage() {
   );
 }
 
+function ViewportManager() {
+  useLayoutEffect(() => {
+    const root = document.documentElement;
+    const visualViewport = window.visualViewport;
+    const supportsDynamicViewport = CSS.supports("height", "100dvh");
+    const supportsStableViewport = CSS.supports("height", "100svh");
+
+    let settleFrame = 0;
+    let followUpFrame = 0;
+    let settleTimer = 0;
+
+    const applyViewportVars = () => {
+      const viewportHeight = Math.round(visualViewport?.height ?? window.innerHeight);
+
+      if (!supportsDynamicViewport) {
+        root.style.setProperty("--viewport-height", `${viewportHeight}px`);
+      }
+
+      if (!supportsStableViewport) {
+        root.style.setProperty("--viewport-stable-height", `${viewportHeight}px`);
+      }
+
+      window.dispatchEvent(new Event("viewport:change"));
+    };
+
+    const syncViewport = () => {
+      window.cancelAnimationFrame(settleFrame);
+      window.cancelAnimationFrame(followUpFrame);
+      window.clearTimeout(settleTimer);
+
+      applyViewportVars();
+      settleFrame = window.requestAnimationFrame(applyViewportVars);
+      followUpFrame = window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(applyViewportVars);
+      });
+      settleTimer = window.setTimeout(applyViewportVars, 180);
+    };
+
+    syncViewport();
+
+    window.addEventListener("resize", syncViewport);
+    window.addEventListener("orientationchange", syncViewport);
+    window.addEventListener("pageshow", syncViewport);
+    visualViewport?.addEventListener("resize", syncViewport);
+
+    return () => {
+      window.cancelAnimationFrame(settleFrame);
+      window.cancelAnimationFrame(followUpFrame);
+      window.clearTimeout(settleTimer);
+      window.removeEventListener("resize", syncViewport);
+      window.removeEventListener("orientationchange", syncViewport);
+      window.removeEventListener("pageshow", syncViewport);
+      visualViewport?.removeEventListener("resize", syncViewport);
+    };
+  }, []);
+
+  return null;
+}
+
 function AosManager() {
   const location = useLocation();
 
@@ -75,7 +134,42 @@ function AosManager() {
   }, []);
 
   useEffect(() => {
-    AOS.refreshHard();
+    let refreshFrame = 0;
+    let refreshTimer = 0;
+    const visualViewport = window.visualViewport;
+
+    const scheduleRefresh = () => {
+      window.cancelAnimationFrame(refreshFrame);
+      window.clearTimeout(refreshTimer);
+
+      refreshFrame = window.requestAnimationFrame(() => {
+        AOS.refreshHard();
+      });
+      refreshTimer = window.setTimeout(() => {
+        AOS.refreshHard();
+      }, 180);
+    };
+
+    scheduleRefresh();
+
+    window.addEventListener("resize", scheduleRefresh);
+    window.addEventListener("orientationchange", scheduleRefresh);
+    window.addEventListener("pageshow", scheduleRefresh);
+    window.addEventListener("viewport:change", scheduleRefresh);
+    window.addEventListener("splashscreen:complete", scheduleRefresh);
+    visualViewport?.addEventListener("resize", scheduleRefresh);
+    document.fonts?.ready?.then(scheduleRefresh).catch(() => {});
+
+    return () => {
+      window.cancelAnimationFrame(refreshFrame);
+      window.clearTimeout(refreshTimer);
+      window.removeEventListener("resize", scheduleRefresh);
+      window.removeEventListener("orientationchange", scheduleRefresh);
+      window.removeEventListener("pageshow", scheduleRefresh);
+      window.removeEventListener("viewport:change", scheduleRefresh);
+      window.removeEventListener("splashscreen:complete", scheduleRefresh);
+      visualViewport?.removeEventListener("resize", scheduleRefresh);
+    };
   }, [location.pathname, location.hash]);
 
   return null;
@@ -85,6 +179,7 @@ function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
+        <ViewportManager />
         <AosManager />
         <Routes>
           <Route path="/" element={<LandingPage />} />

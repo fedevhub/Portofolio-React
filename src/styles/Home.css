@@ -8,6 +8,10 @@
     margin: 0 auto;
 }
 
+.hero-section .container {
+    padding-inline: clamp(16px, 4vw, 24px);
+}
+
 .hero-reveal {
     opacity: 0;
     transform: translateY(26px) scale(0.98);
@@ -70,12 +74,12 @@
     background: linear-gradient(135deg, #5a0000, #9b2335);
     border: none;
     color: #ffffff;
-    box-shadow: 0 14px 30px rgba(155,35,53, 0.28);
+    box-shadow: 0 14px 30px rgba(155, 35, 53, 0.28);
 }
 
 .btn-primary-modern:hover {
     transform: translateY(-2px);
-    box-shadow: 0 20px 40px rgba(155,35,53, 0.35);
+    box-shadow: 0 20px 40px rgba(155, 35, 53, 0.35);
 }
 
 .btn.btn-outline-modern {
@@ -108,6 +112,7 @@
 }
 
 @keyframes heroAccentGlow {
+
     0%,
     100% {
         transform: translateY(0);
@@ -126,17 +131,12 @@
     }
 
     .hero-section {
-        padding-top: 120px;
+        padding-top: calc(env(safe-area-inset-top, 0px) + 120px);
+        padding-bottom: 96px;
     }
-
-
 }
 
 @media (max-width: 576px) {
-    body {
-        padding: 0 15px;
-    }
-
     .navbar-brand {
         padding-left: 15px;
         font-size: 2.7rem;
@@ -160,23 +160,61 @@
     }
 
     .hero-title {
-        font-size: 2.5rem;
+        font-size: clamp(2.2rem, 12vw, 2.8rem);
     }
 
     .hero-role {
-        font-size: 0.9rem;
+        font-size: 0.98rem;
     }
 
     .hero-text {
-        font-size: 0.8rem;
-        padding: 0 10px;
+        font-size: 0.92rem;
+        padding: 0;
     }
 
     .hero-actions .btn {
-        padding: 14px 28px;
+        width: aut0;
+        justify-content: center;
+        padding: 14px 24px;
         font-size: 0.75rem;
+        white-space: nowrap;
     }
 
+    .hero-actions {
+        flex-wrap: nowrap;
+        justify-content: center;
+    }
+
+}
+
+@media (max-width: 576px) {
+
+    /* judul utama */
+    .hero-title {
+        font-size: clamp(1.9rem, 8vw, 2.3rem);
+        line-height: 1.2;
+        margin-bottom: 10px;
+    }
+
+    /* subjudul (role) */
+    .hero-role {
+        font-size: 0.9rem;
+        margin-bottom: 14px;
+    }
+
+    /* teks deskripsi */
+    .hero-text {
+        font-size: 0.85rem;
+        line-height: 1.5;
+        margin-bottom: 22px;
+    }
+
+    /* teks kecil atas (Hello, It's Me) */
+    .hero-eyebrow {
+        font-size: 0.7rem;
+        letter-spacing: 0.14em;
+        margin-bottom: 12px;
+    }
 }
 
 @media (max-width: 991px) {
@@ -196,5 +234,12 @@
     .site-nav .navbar-nav .nav-link:focus-visible::after,
     .site-nav .navbar-nav .nav-link.active::after {
         width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+        padding-top: calc(env(safe-area-inset-top, 0px) + 90px);
+        padding-bottom: 70px;
     }
 }

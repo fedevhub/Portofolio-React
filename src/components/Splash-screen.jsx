@@ -64,7 +64,13 @@ export default function SplashScreen() {
 
     // auto hide splash
     useEffect(() => {
+        const previousBodyOverflow = document.body.style.overflow;
+        const previousHtmlOverflow = document.documentElement.style.overflow;
+
         document.body.dataset.splash = "active";
+        document.body.style.overflow = "hidden";
+        document.documentElement.style.overflow = "hidden";
+        window.dispatchEvent(new Event("viewport:change"));
 
         const leaveTimer = window.setTimeout(() => {
             setIsLeaving(true);
@@ -72,6 +78,9 @@ export default function SplashScreen() {
 
         const timer = window.setTimeout(() => {
             document.body.dataset.splash = "done";
+            document.body.style.overflow = previousBodyOverflow;
+            document.documentElement.style.overflow = previousHtmlOverflow;
+            window.dispatchEvent(new Event("viewport:change"));
             window.dispatchEvent(new Event("splashscreen:complete"));
             setHidden(true);
         }, 2850);
@@ -79,6 +88,9 @@ export default function SplashScreen() {
         return () => {
             window.clearTimeout(leaveTimer);
             window.clearTimeout(timer);
+
+            document.body.style.overflow = previousBodyOverflow;
+            document.documentElement.style.overflow = previousHtmlOverflow;
 
             if (document.body.dataset.splash !== "done") {
                 delete document.body.dataset.splash;

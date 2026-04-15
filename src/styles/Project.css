@@ -668,7 +668,7 @@
     overflow-x: hidden;
     justify-content: center;
     z-index: 1050;
-    padding: 20px;
+    padding: max(16px, env(safe-area-inset-top, 0px)) 20px max(20px, env(safe-area-inset-bottom, 0px));
     opacity: 1;
     transition: opacity 0.3s ease;
 }
@@ -691,7 +691,7 @@
 .project-detail-modal {
     width: 100%;
     max-width: 1000px;
-    max-height: 90vh;
+    max-height: min(90vh, calc(var(--viewport-stable-height, 100vh) - 48px));
     overflow-y: auto;
     background: linear-gradient(160deg, rgba(20, 8, 12, 0.98) 0%, rgba(12, 5, 7, 0.99) 50%, rgba(8, 3, 4, 1) 100%);
     border: 1px solid rgba(139, 41, 66, 0.25);
@@ -1244,7 +1244,7 @@
 
 @media (max-width: 480px) {
     .project-detail-modal {
-        max-height: 95vh;
+        max-height: min(95vh, calc(var(--viewport-stable-height, 100vh) - 24px));
         border-radius: 20px;
     }
 
@@ -1615,7 +1615,7 @@
 }
 
 .project-detail-modal {
-    max-height: calc(100vh - 48px);
+    max-height: calc(var(--viewport-stable-height, 100vh) - 48px);
     overflow-y: auto;
     overscroll-behavior: contain;
 }
@@ -1798,7 +1798,7 @@
     }
 
     .project-detail-modal {
-        max-height: calc(100vh - 32px);
+        max-height: calc(var(--viewport-stable-height, 100vh) - 32px);
     }
 
     .project-editor-header {
@@ -1951,7 +1951,7 @@
     }
 
     .project-modal-card {
-        max-height: 95vh;
+        max-height: min(95vh, calc(var(--viewport-stable-height, 100vh) - 24px));
     }
 
     .project-modal-header {
@@ -2707,15 +2707,37 @@ body[data-theme="light"] .project-status-badge.ongoing {
 
 @media (max-width: 640px) {
     .project-modal-backdrop {
-        padding: 14px 14px calc(env(safe-area-inset-bottom, 0px) + 30px);
+        align-items: flex-end;
+        padding: 12px 12px 0;
     }
 
     .project-detail-modal {
-        margin: 16px auto 28px;
+        width: 100%;
+        max-width: 100%;
+        max-height: calc(var(--viewport-stable-height, 100vh) - env(safe-area-inset-top, 0px) - 12px);
+        margin: 0;
+        border-radius: 24px 24px 0 0;
     }
 
     .project-preview-section {
-        padding: 22px 18px 30px;
+        padding: 22px 18px calc(env(safe-area-inset-bottom, 0px) + 24px);
+    }
+
+    .project-info-section {
+        padding: 24px 18px;
+    }
+
+    .project-modal-content {
+        min-height: 0;
+    }
+
+    .project-action-grid {
+        padding-bottom: 4px;
+    }
+
+    .project-modal-close {
+        top: 14px;
+        right: 14px;
     }
 
     .project-editor-actions .btn,

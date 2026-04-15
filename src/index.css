@@ -1,4 +1,6 @@
 :root {
+  --viewport-height: 100vh;
+  --viewport-stable-height: 100vh;
   --maroon-primary: #5a0000;
   --maroon-dark: #2a0407;
   --maroon-light: #7f1a2a;
@@ -57,6 +59,18 @@
   --text-gray: var(--text-muted);
 }
 
+@supports (height: 100dvh) {
+  :root {
+    --viewport-height: 100dvh;
+  }
+}
+
+@supports (height: 100svh) {
+  :root {
+    --viewport-stable-height: 100svh;
+  }
+}
+
 :root[data-theme="light"],
 body[data-theme="light"] {
   --maroon-primary: #6b0f1a;
@@ -113,6 +127,10 @@ body[data-theme="light"] {
   box-sizing: border-box;
 }
 
+html {
+  min-height: 100%;
+}
+
 body {
   font-family: 'Poppins', sans-serif;
   background-color: var(--bg-primary);
@@ -121,9 +139,20 @@ body {
   scroll-behavior: smooth;
   line-height: 1.65;
   text-rendering: optimizeLegibility;
-  min-height: 100vh;
+  min-height: var(--viewport-stable-height);
   display: flex;
   flex-direction: column;
+}
+
+#root {
+  min-height: inherit;
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+}
+
+.page-content {
+  flex: 1 0 auto;
 }
 
 .background {
@@ -328,5 +357,4 @@ body {
     transform: translateX(-50%);
   }
 }
-
 

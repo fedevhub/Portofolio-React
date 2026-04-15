@@ -97,14 +97,14 @@ h6 {
 
 .hero-section {
 
-    min-height: 100vh;
+    min-height: var(--viewport-stable-height, 100vh);
     position: relative;
     overflow: hidden;
 
 }
 
 .about-section {
-    min-height: 92vh;
+    min-height: calc(var(--viewport-stable-height, 100vh) * 0.92);
     display: flex;
     align-items: center;
     position: relative;
