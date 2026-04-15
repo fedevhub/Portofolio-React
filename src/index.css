@@ -413,3 +413,10 @@ svg {
     transform: none !important;
   }
 }
+
+
+.project-card *,
+.project-card *::before,
+.project-card *::after {
+  box-sizing: border-box;
+}

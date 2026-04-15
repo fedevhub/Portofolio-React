@@ -28,7 +28,7 @@ const STATUS_PRIORITY = {
 const STATUS_META = {
   completed: { text: "Completed", class: "done" },
   "in repair": { text: "In Repair", class: "repair" },
-  "on progress": { text: "On Progress", class: "progress" },
+  "on progress": { text: "On Progress", class: "on-progress" },
   "on going": { text: "On Going", class: "ongoing" },
 };
 
@@ -1014,13 +1014,18 @@ export default function Project() {
                       <div className="project-card-footer">
                         <div className="project-card-actions-stack">
                             {linkCount > 0 && (
-                              <div className={`project-link-actions ${linkCount === 1 ? "single-link" : "dual-link"}`}>
+                              <div className="project-link-actions">
                                 {showPreview && (
-                                  <a href={project.preview_url} target="_blank" rel="noreferrer" className="btn btn-preview">
+                                  <a href={project.preview_url} className="btn btn-preview">
                                     <i className="bi bi-eye"></i> Preview
                                   </a>
                                 )}
-                                <button type="button" className="btn btn-detail" onClick={() => setSelectedProject(project)}>
+
+                                <button
+                                  type="button"
+                                  className="btn btn-detail"
+                                  onClick={() => setSelectedProject(project)}
+                                >
                                   <i className="bi bi-info-circle"></i> Detail
                                 </button>
                               </div>
