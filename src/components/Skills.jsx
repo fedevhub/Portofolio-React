@@ -180,7 +180,7 @@ export default function Skills() {
             data-aos="fade-up"
             data-aos-delay="200"
           >
-            The tools and technologies I’m currently learning and using to build applications and websites.
+            Alat dan teknologi yang sedang saya pelajari dan gunakan untuk membangun aplikasi dan situs web.
           </p>
         </div>
 

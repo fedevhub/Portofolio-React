@@ -926,7 +926,7 @@ export default function Project() {
             data-aos-duration="700"
             data-aos-easing="ease-out">
             <h2 className="highlight">My Projects</h2>
-            <p className="highlight-text mt-3">A collection of projects resulting from my learning and exploration in the world of web development.</p>
+            <p className="highlight-text mt-3">Kumpulan proyek yang dihasilkan dari pembelajaran dan eksplorasi saya di dunia pengembangan web.</p>
           </div>
 
           {isAdmin && (

@@ -67,9 +67,9 @@ export default function Home() {
                                 data-aos-delay="260"
                                 style={{ "--hero-delay": "0.38s" }}
                             >
-                                Passionate about modern web development and constantly learning new technologies.
-                                Currently focusing on web design, front-end engineering, and building clean,
-                                responsive user interfaces.
+                                Pelajar yang fokus mempelajari pengembangan web modern dengan spesialisasi front-end. Terus 
+                                mengasah kemampuan membuat tampilan web yang bersih, responsif, dan user-friendly melalui 
+                                proyek latihan.
                             </p>
 
                             <div

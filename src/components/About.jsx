@@ -26,15 +26,12 @@ export default function About() {
                                 data-aos="fade-up"
                                 data-aos-delay="200"
                             >
-                                Hello! I'm Fitri Rachmania, a vocational high school student 
-                                majoring in Software Engineering. I'm interested in web 
-                                development and interface design with a focus on user 
-                                experience. I enjoy creating simple, functional, and 
-                                user-friendly interfaces, and I'm constantly learning 
-                                to develop my digital technology skills. I'm also very 
-                                interested in improving my problem-solving skills through 
-                                real-world projects and continuous practice. I'm currently 
-                                open to collaborations, internships, and freelance projects.
+                                Halo! Saya Fitri Rachmania, seorang siswa SMA kejuruan jurusan Rekayasa Perangkat Lunak. 
+                                Saya tertarik pada pengembangan web dan desain antarmuka dengan fokus pada pengalaman pengguna. 
+                                Saya senang membuat antarmuka yang sederhana, fungsional, dan ramah pengguna, dan saya terus 
+                                belajar untuk mengembangkan keterampilan teknologi digital saya. Saya juga sangat tertarik 
+                                untuk meningkatkan kemampuan pemecahan masalah saya melalui proyek-proyek dunia nyata dan 
+                                latihan terus-menerus. Saat ini saya terbuka untuk kolaborasi, magang, dan proyek lepas.
                             </p>
                         </div>
 
