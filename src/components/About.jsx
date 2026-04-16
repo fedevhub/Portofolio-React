@@ -26,7 +26,7 @@ export default function About() {
                                 data-aos="fade-up"
                                 data-aos-delay="200"
                             >
-                                Halo! Saya Fitri Rachmania, seorang siswa SMA kejuruan jurusan Rekayasa Perangkat Lunak. 
+                                Halo! Saya Fitri Rachmania, seorang siswa SMK kejuruan jurusan Rekayasa Perangkat Lunak. 
                                 Saya tertarik pada pengembangan web dan desain antarmuka dengan fokus pada pengalaman pengguna. 
                                 Saya senang membuat antarmuka yang sederhana, fungsional, dan ramah pengguna, dan saya terus 
                                 belajar untuk mengembangkan keterampilan teknologi digital saya. Saya juga sangat tertarik 
