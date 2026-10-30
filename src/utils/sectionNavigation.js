@@ -1,4 +1,4 @@
-export const SECTION_IDS = ["home", "about", "skills", "project", "contact"];
+export const SECTION_IDS = ["home", "about", "tools", "journey", "project", "services", "contact"];
 
 export function isKnownSectionId(sectionId) {
   return SECTION_IDS.includes(sectionId);

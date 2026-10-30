@@ -2,7 +2,7 @@ const PENDING_SECTION_KEY = "portfolio:pending-section";
 
 export function getNavbarOffset() {
   const navbar = document.querySelector(".site-nav");
-  return (navbar?.offsetHeight ?? 0) + 24;
+  return (navbar?.offsetHeight ?? 0);
 }
 
 export function rememberSectionTarget(sectionId) {

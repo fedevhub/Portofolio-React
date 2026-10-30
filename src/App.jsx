@@ -12,6 +12,8 @@ import Project, {
 } from "./components/Project";
 import Footer from "./components/Footer";
 import Skills from "./components/Skills";
+import Journey from "./components/Journey";
+import Services from "./components/Services";
 import SplashScreen from "./components/Splash-screen";
 
 import { AuthProvider } from "./context/AuthContext";
@@ -40,7 +42,11 @@ function BackgroundLayer() {
         <div className="floating-element element-3"></div>
       </div>
       <div className="grid"></div>
-      <div className="particles" id="particles"></div>
+      <div className="particles" id="particles" aria-hidden="true">
+        {Array.from({ length: 12 }, (_, index) => (
+          <span className="particle" key={index}></span>
+        ))}
+      </div>
       <div className="waves">
         <div className="wave wave-1"></div>
         <div className="wave wave-2"></div>
@@ -93,7 +99,9 @@ function LandingPage() {
       <Home />
       <About />
       <Skills />
+      <Journey />
       <Project />
+      <Services />
       <Footer />
     </SiteLayout>
   );

@@ -49,7 +49,8 @@ export default function Home() {
                                 data-aos-delay="100"
                                 style={{ "--hero-delay": "0.18s" }}
                             >
-                                Fitri <span className="hero-title-accent">Rachmania</span>
+                                <span className="hero-title-first">Fitri</span>{" "}
+                                <span className="hero-title-accent">Rachmania</span>
                             </h1>
 
                             <h3

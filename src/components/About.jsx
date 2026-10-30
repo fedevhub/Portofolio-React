@@ -1,5 +1,5 @@
 import "../styles/About.css";
-import me from "../assets/images/me.jpeg";
+import me from "../assets/images/me1.png";
 
 export default function About() {
     return (

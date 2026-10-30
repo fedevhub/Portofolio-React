@@ -19,7 +19,7 @@ export default function Footer() {
                             </li>
                             <li>
                                 <i className="bi bi-envelope-fill"></i>
-                                <span>fitrirachmania29@gmail.com</span>
+                                <span>fitrirachmania93@gmail.com</span>
                             </li>
                         </ul>
                     </div>
@@ -41,13 +41,17 @@ export default function Footer() {
                                 <i className="bi bi-behance"></i>
                                 <span>Behance</span>
                             </a>
-                            <a href="mailto:fitrirachmania29@gmail.com" className="social-item">
+                            <a href="mailto:fitrirachmania93@gmail.com" className="social-item">
                                 <i className="bi bi-envelope-fill"></i>
                                 <span>Email</span>
                             </a>
                             <a href="https://github.com/fedevhub" target="_blank" className="social-item">
                                 <i className="bi bi-github"></i>
                                 <span>Github</span>
+                            </a>
+                            <a href="https://www.linkedin.com/in/fitri-rachmania" target="_blank" className="social-item">
+                                <i className="bi bi-linkedin"></i>
+                                <span>Linkedin</span>
                             </a>
                         </div>
                     </div>
